@@ -1,0 +1,24 @@
+<h2 class="content-block">Perfil</h2>
+<div class="content-block dx-card responsive-paddings">
+<dx-form id="form" [formData]="user">
+	<dxi-item itemType="group" cssClass="first-group" [colCount]="4">
+		<dxi-item>
+			<div class="form-avatar"><img src="{{ user | noImage }}"/></div>
+		</dxi-item>
+		<dxi-item itemType="group" [colSpan]="3">
+				<dxi-item dataField="nombreUsuario"></dxi-item>
+				<dxi-item dataField="birthDate" editorType="dxDateBox" [editorOptions]="{ width: '100%'}"></dxi-item>
+		</dxi-item>
+	</dxi-item>
+	<dxi-item itemType="group" cssClass="second-group" [colCount]="2">
+		<dxi-item itemType="group">
+			<dxi-item dataField="cargoUsuario" editorType="dxSelectBox" [editorOptions]="{ items: cargos, value: '' }"></dxi-item>
+			<dxi-item dataField="email"></dxi-item>
+			<dxi-item dataField="telefono" [label]="{text: 'Telefono'}" [editorOptions]="{ mask: '+57 (000) 000 0000'}"></dxi-item>
+		</dxi-item>
+		<dxi-item itemType="group">
+			<dxi-item dataField="Descripcion" [colSpan]="2" editorType="dxTextArea" [editorOptions]="{ height: 140 }"></dxi-item>
+		</dxi-item>
+	</dxi-item>
+</dx-form>
+</div>

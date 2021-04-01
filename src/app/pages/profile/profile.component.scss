@@ -1,0 +1,44 @@
+// .form-avatar {
+//   float: left;
+//   height: 120px;
+//   width: 120px;
+//   margin-right: 20px;
+//   border: 1px solid rgba(0, 0, 0, 0.1);
+//   background-size: contain;
+//   background-repeat: no-repeat;
+//   background-position: center;
+//   background-color: #fff;
+//   overflow: hidden;
+//
+//   img {
+//     height: 120px;
+//     display: block;
+//     margin: 0 auto;
+//   }
+
+::ng-deep .first-group,
+::ng-deep .second-group {
+    padding: 20px;
+}
+
+::ng-deep .second-group {
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .form-avatar {
+    height: 128px;
+    width: 128px;
+    margin-right: 10px;
+    border: 1px solid #d2d3d5;
+    border-radius: 50%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    overflow:hidden; 
+
+    img {
+         height: 128px;
+         display: block;
+         margin: 0 auto;
+       }
+}
