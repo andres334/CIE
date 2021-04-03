@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule } from '@angular/core';
+import { Component, Input, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import {
   PdfViewerModule,
@@ -17,7 +17,7 @@ import {
 
 @Component({
   selector: 'app-document-viewer',
-  templateUrl:'./document-viewer.component.html',
+  templateUrl: './document-viewer.component.html',
   providers: [
     LinkAnnotationService,
     BookmarkViewService,
@@ -30,20 +30,32 @@ import {
     TextSelectionService,
     PrintService,
   ],
-  styleUrls: []
+  styleUrls: [],
 })
 export class DocumentViewerComponent {
-  public service =
-    'https://ej2services.syncfusion.com/production/web-services/api/pdfviewer';
-  public document = 'PDF_Succinctly.pdf';
-  constructor(private router: Router) {}
+  @Input()
+  pdfname: string;
+
+  public service = 'https://cie.electroao.com/WSAO/API/PdfViewer';
+  public document = '1000119378_0_1000119378_9.pdf';
+  constructor(private router: Router) {
+  }
 }
 
 @NgModule({
   imports: [PdfViewerModule, CommonModule, RouterModule],
   declarations: [DocumentViewerComponent],
   exports: [DocumentViewerComponent],
-  providers: [LinkAnnotationService, BookmarkViewService, MagnificationService,
-    ThumbnailViewService, ToolbarService, NavigationService, TextSearchService, TextSelectionService, PrintService]
+  providers: [
+    LinkAnnotationService,
+    BookmarkViewService,
+    MagnificationService,
+    ThumbnailViewService,
+    ToolbarService,
+    NavigationService,
+    TextSearchService,
+    TextSelectionService,
+    PrintService,
+  ],
 })
 export class DocumentViewerModule {}

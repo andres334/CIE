@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
 import notify from 'devextreme/ui/notify';
 import { Usuario, RecaudoExt } from 'src/app/models';
 import { RecaudoextService, AuthService } from '../../shared/services';
@@ -7,6 +7,7 @@ import { BarcodeFormat } from '@zxing/library';
 @Component({
   templateUrl: './recaudoext.component.html',
 })
+
 export class RecaudoextComponent implements OnInit {
   user: Usuario;
   loading: boolean;
@@ -16,8 +17,14 @@ export class RecaudoextComponent implements OnInit {
   popupVisible: boolean;
   popupPagoVisible: boolean;
   popupCameraVisible: boolean;
+  popupRecaudoVisible: boolean;
   btnPago: boolean;
+  btnRecaudo: boolean;
   codigoBarras = '';
+
+  @Output()
+  idRecaudo: string;
+  //'318818'
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -35,10 +42,13 @@ export class RecaudoextComponent implements OnInit {
     private recaudoextService: RecaudoextService,
     private authService: AuthService
   ) {
-    this.popupVisible = true;
+    //this.idRecaudo = '-12629196_-1_-12629196_1.pdf';
     this.btnPago = false;
+    this.btnRecaudo = true;
+    this.popupVisible = true;
     this.popupPagoVisible = false;
     this.popupCameraVisible = false;
+    this.popupRecaudoVisible = false;
     this.authService.getUser().subscribe((data) => {
       if (data['data']) {
         this.user = data['data'];
@@ -123,8 +133,10 @@ export class RecaudoextComponent implements OnInit {
     this.recaudoextService.postRecaudo(this.recaudoext).subscribe((data) => {
       if (data['result'] == 1) {
         console.log(data);
-        this.popupVisible = false;
+        this.popupPagoVisible = false;
         this.btnPago = false;
+        this.btnRecaudo = true;
+        this.idRecaudo = data['data'];
         notify('Guardado Correctamente', 'success', 2000);
         this.loading = false;
       } else {
@@ -187,5 +199,9 @@ export class RecaudoextComponent implements OnInit {
 
   onHasPermission(has: boolean) {
     this.hasPermission = has;
+  }
+
+  mostrarRecaudo(){
+    this.popupRecaudoVisible = true;
   }
 }
