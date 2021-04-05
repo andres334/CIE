@@ -1,9 +1,3 @@
-<div class="content-wrapper">
-    <ejs-pdfviewer
-      id="pdfViewer"
-      [(serviceUrl)]="service"
-      [documentPath]="document"
-      style="height:640px"
-      enableDownload='true'
-    ></ejs-pdfviewer>
-  </div>
+<dx-report-viewer [reportUrl]="reportUrl" height="800px">
+  <dxrv-request-options [invokeAction]="invokeAction" [host]="hostUrl"></dxrv-request-options>
+</dx-report-viewer>

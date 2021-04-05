@@ -1,36 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, NgModule } from '@angular/core';
+import { Component, ViewEncapsulation, Input, NgModule } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import {
-  PdfViewerModule,
-  LinkAnnotationService,
-  BookmarkViewService,
-  MagnificationService,
-  ThumbnailViewService,
-  ToolbarService,
-  NavigationService,
-  AnnotationService,
-  TextSearchService,
-  TextSelectionService,
-  PrintService,
-} from '@syncfusion/ej2-angular-pdfviewer';
+import { DxReportViewerModule } from 'devexpress-reporting-angular';
 
 @Component({
   selector: 'app-document-viewer',
+  encapsulation: ViewEncapsulation.None,
   templateUrl: './document-viewer.component.html',
-  providers: [
-    LinkAnnotationService,
-    BookmarkViewService,
-    MagnificationService,
-    ThumbnailViewService,
-    ToolbarService,
-    NavigationService,
-    AnnotationService,
-    TextSearchService,
-    TextSelectionService,
-    PrintService,
-  ],
-  styleUrls: [],
+  styleUrls: [
+    "../../../../../node_modules/jquery-ui/themes/base/all.css",
+    "../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.common.css",
+    "../../../../../node_modules/@devexpress/analytics-core/dist/css/dx-analytics.light.css",
+    "../../../../../node_modules/devexpress-reporting/dist/css/dx-webdocumentviewer.css"
+]
 })
 export class DocumentViewerComponent {
   @Input()
@@ -38,24 +20,17 @@ export class DocumentViewerComponent {
 
   public service = 'https://cie.electroao.com/WSAO/API/PdfViewer';
   public document = '1000119378_0_1000119378_9.pdf';
-  constructor(private router: Router) {
-  }
+
+  title = 'Reporte';
+  reportUrl: string = 'Products';
+  hostUrl: string = 'https://cie.electroao.com/WSAO/API';
+  invokeAction: string = '/WebDocumentViewer/Invoke';
+  constructor(private router: Router) {}
 }
 
 @NgModule({
-  imports: [PdfViewerModule, CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, DxReportViewerModule],
   declarations: [DocumentViewerComponent],
   exports: [DocumentViewerComponent],
-  providers: [
-    LinkAnnotationService,
-    BookmarkViewService,
-    MagnificationService,
-    ThumbnailViewService,
-    ToolbarService,
-    NavigationService,
-    TextSearchService,
-    TextSelectionService,
-    PrintService,
-  ],
 })
 export class DocumentViewerModule {}
