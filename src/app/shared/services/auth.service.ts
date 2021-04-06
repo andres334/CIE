@@ -19,18 +19,19 @@ export class AuthService {
 
   constructor(private router: Router, private http : HttpClient) { }
 
+  //http://localhost/WSCIE/Usuario/LogIn?Id=12412&Clave=1241
   getQuery(query: string){
-    return this.http.get(`https://cie.electroao.com/WSAO/API/${query}`,
+    return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
     { headers:{ 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
-
+  
   postQuery(query: string, body : string[]){
-    return this.http.post(`https://cie.electroao.com/WSAO/API/${query}`, body,
+    return this.http.post(`https://cie.electroao.com/WSCIE/${query}`, body,
     { headers:{ 'Content-Type': 'application/json' }});
   }
 
   logIn (codigo: string, password: string) {
-    return this.getQuery(`Usuario/${codigo}?Clave=${password}`)
+    return this.getQuery(`Usuario/LogIn?Id=${codigo}&Clave=${password}`)
     .pipe( map( resp => {
       if(resp['result']==1){
         this.setToken(resp['data'].token);
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   getUser () {
-    return this.getQuery(`Usuario?token=${this.getToken()}`).pipe( map( resp => {
+    return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result']== -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -53,7 +54,7 @@ export class AuthService {
   }
 
   getOpciones () {
-    return this.getQuery(`Opciones?token=${this.getToken()}`).pipe( map( resp => {
+    return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result']== -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);

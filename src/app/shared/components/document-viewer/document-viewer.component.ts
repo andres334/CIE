@@ -23,7 +23,7 @@ export class DocumentViewerComponent {
 
   title = 'Reporte';
   reportUrl: string = 'Products';
-  hostUrl: string = 'https://cie.electroao.com/WSAO/API';
+  hostUrl: string = 'https://cie.electroao.com/WSCIE';
   invokeAction: string = '/WebDocumentViewer/Invoke';
   constructor(private router: Router) {}
 }
