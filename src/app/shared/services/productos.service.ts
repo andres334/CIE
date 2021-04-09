@@ -11,12 +11,12 @@ export class ProductosService {
   constructor( private http : HttpClient , private authService : AuthService) { }
 
   getQuery(query: string){
-    return this.http.get(`https://cie.electroao.com/WSAO/API/${query}`,
+    return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
     { headers:{ 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
 
   getCategorias () {
-    return this.getQuery(`Producto?token=${this.authService.getToken()}`).pipe( map (
+    return this.getQuery(`Producto/Obtener?token=${this.authService.getToken()}`).pipe( map (
       resp => {
         if(resp['data']){
           this.datasource = resp['data'];

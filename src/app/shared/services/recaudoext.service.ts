@@ -14,17 +14,17 @@ export class RecaudoextService {
   constructor(private http : HttpClient, private router: Router, private authService : AuthService) { }
 
   getQuery(query: string){
-    return this.http.get(`https://cie.electroao.com/WSAO/API/${query}`,
+    return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
     { headers:{ 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
 
   postQuery(query: string, body : any){
-    return this.http.post(`https://cie.electroao.com/WSAO/API/${query}`, body,
+    return this.http.post(`https://cie.electroao.com/WSCIE/${query}`, body,
     { headers:{ 'Content-Type': 'application/json' }});
   }
 
   getFactura(codigo : string){
-    return this.getQuery(`RecaudoExt?token=${this.authService.getToken()}&codigo=${codigo}`).pipe( map( resp => {
+    return this.getQuery(`RecaudoExt/ObtenerCodigo?token=${this.authService.getToken()}&codigo=${codigo}`).pipe( map( resp => {
       if (resp['result'] == -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -36,7 +36,7 @@ export class RecaudoextService {
   }
 
   getDatosEntidad(){
-    return this.getQuery(`RecaudoExt?token=${this.authService.getToken()}`).pipe( map( resp => {
+    return this.getQuery(`RecaudoExt/ObtenerEntidad?token=${this.authService.getToken()}`).pipe( map( resp => {
       if (resp['result'] == -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -46,7 +46,7 @@ export class RecaudoextService {
   }
 
   postRecaudo(recaudoExt : RecaudoExt){
-    return this.postQuery(`RecaudoExt?token=${this.authService.getToken()}`, recaudoExt).pipe(map( resp => {
+    return this.postQuery(`RecaudoExt/Guardar?token=${this.authService.getToken()}`, recaudoExt).pipe(map( resp => {
       if (resp['result'] == -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);

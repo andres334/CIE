@@ -1,4 +1,10 @@
-import { Component, NgModule, Input, OnInit } from '@angular/core';
+import {
+  Component,
+  NgModule,
+  Input,
+  OnInit,
+  AfterViewInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { DxListModule } from 'devextreme-angular/ui/list';
@@ -11,9 +17,8 @@ import notify from 'devextreme/ui/notify';
 @Component({
   selector: 'app-user-panel',
   templateUrl: 'user-panel.component.html',
-  styleUrls: ['./user-panel.component.scss']
+  styleUrls: ['./user-panel.component.scss'],
 })
-
 export class UserPanelComponent implements OnInit {
   @Input()
   menuItems: any;
@@ -23,31 +28,24 @@ export class UserPanelComponent implements OnInit {
 
   user: Usuario;
 
-  constructor(private authService: AuthService) {
-    this.authService.getUser().subscribe(
-      data => {
-        if(data['data']){
-          this.user = data['data'];
-        }else{
-          notify(data['message'], 'error', 2000);
-        }
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.authService.getUser().subscribe((data) => {
+      if (data['data']) {
+        this.user = data['data'];
+      } else {
+        notify(data['message'], 'error', 2000);
       }
-    );
-  }
-
-  ngOnInit(){
-
+    });
   }
 }
 
 @NgModule({
-  imports: [
-    DxListModule,
-    DxContextMenuModule,
-    CommonModule,
-    MainPipe
-  ],
-  declarations: [ UserPanelComponent ],
-  exports: [ UserPanelComponent ]
+  imports: [DxListModule, DxContextMenuModule, CommonModule, MainPipe],
+  declarations: [UserPanelComponent],
+  exports: [UserPanelComponent],
 })
-export class UserPanelModule { }
+export class UserPanelModule {}
