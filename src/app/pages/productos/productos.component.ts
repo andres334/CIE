@@ -9,44 +9,44 @@ import { ProductosService } from 'src/app/shared/services';
 
 export class ProductosComponent implements OnInit {
   formData = {
-    SKU: "",
-    Nombre: "",
-    modelo: "",
-    linea: "",
-    grupo: "",
-    subgrupo: "",
-    marca: "",
+    SKU: '',
+    Nombre: '',
+    modelo: '',
+    linea: '',
+    grupo: '',
+    subgrupo: '',
+    marca: '',
     colores: [],
     tallas: []
 };
-  loading :boolean;
-  lineasOptions : any;
-  gruposOptions : any;
-  subgruposOptions : any;
-  marcasOptions : any;
-  modeloOptions : any;
-  chkcolorOptions : any;
-  chktallaOptions : any;
-  addColorBtnOptions : any;
-  addTallaBtnOptions : any;
+  loading: boolean;
+  lineasOptions: any;
+  gruposOptions: any;
+  subgruposOptions: any;
+  marcasOptions: any;
+  modeloOptions: any;
+  chkcolorOptions: any;
+  chktallaOptions: any;
+  addColorBtnOptions: any;
+  addTallaBtnOptions: any;
   colorOptions: any[] = [];
   tallaOptions: any[] = [];
 
-  sku : string[] = [];
-  lineas : [];
-  grupos : [];
-  subgrupos : [];
-  acolores : string[];
-  atallas : string[];
-  isColorVisible : boolean;
-  isTallaVisible : boolean;
+  sku: string[] = [];
+  lineas: [];
+  grupos: [];
+  subgrupos: [];
+  acolores: string[];
+  atallas: string[];
+  isColorVisible: boolean;
+  isTallaVisible: boolean;
 
-  constructor(private productosService : ProductosService) {
+  constructor(private productosService: ProductosService) {
     this.loading = true;
     this.isColorVisible = (this.formData.colores.length > 0);
     this.isTallaVisible = (this.formData.tallas.length > 0);
     this.productosService.getCategorias().subscribe( data => {
-      if(data['data']){
+      if (data['data']){
         this.lineas = data['data'].lineas;
         this.acolores = data['data'].colores;
         this.atallas = data['data'].tallas;
@@ -89,13 +89,13 @@ export class ProductosComponent implements OnInit {
         };
 
         this.chkcolorOptions = {
-            text: "Colores",
+            text: 'Colores',
             value: (this.formData.colores.length > 0),
             onValueChanged: (e) => this.isColorVisible = e.value
         };
 
         this.chktallaOptions = {
-            text: "Tallas",
+            text: 'Tallas',
             value: (this.formData.tallas.length > 0),
             onValueChanged: (e) => this.isTallaVisible = e.value
         };
@@ -103,23 +103,23 @@ export class ProductosComponent implements OnInit {
         this.modeloOptions = {
           showClearButton : 'true',
           valueChangeEvent: 'keyup',
-          onValueChanged : (e) => this.generarSKU(e.value,1)
+          onValueChanged : (e) => this.generarSKU(e.value, 1)
         };
 
         this.addColorBtnOptions = {
-            icon: "add",
-            text: "Agregar Color",
+            icon: 'add',
+            text: 'Agregar Color',
             onClick: () => {
-                this.formData.colores.push("");
+                this.formData.colores.push('');
                 this.colorOptions = this.getColorsOptions(this.formData.colores);
             }
         };
 
         this.addTallaBtnOptions = {
-            icon: "add",
-            text: "Agregar Talla",
+            icon: 'add',
+            text: 'Agregar Talla',
             onClick: () => {
-                this.formData.tallas.push("");
+                this.formData.tallas.push('');
                 this.tallaOptions = this.getTallasOptions(this.formData.tallas);
             }
         };
@@ -139,7 +139,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getColorsOptions(array: any) {
-    let options = [];
+    const options = [];
     for (let i = 0; i < array.length; i++){
       options.push(this.generateNewColorOptions(i));
     }
@@ -147,7 +147,7 @@ export class ProductosComponent implements OnInit {
   }
 
   getTallasOptions(array: any) {
-    let options = [];
+    const options = [];
     for (let i = 0; i < array.length; i++){
       options.push(this.generateNewTallaOptions(i));
     }
@@ -161,11 +161,11 @@ export class ProductosComponent implements OnInit {
           displayExpr: 'nombreTalla',
           showClearButton : true,
           buttons: [{
-                name: "trash",
-                location: "after",
+                name: 'trash',
+                location: 'after',
                 options: {
-                    stylingMode: "text",
-                    icon: "trash",
+                    stylingMode: 'text',
+                    icon: 'trash',
                     onClick: () => {
                         this.formData.tallas.splice(index, 1);
                         this.tallaOptions = this.getTallasOptions(this.formData.tallas);
@@ -173,7 +173,7 @@ export class ProductosComponent implements OnInit {
                 }
             }],
         onValueChanged: (e) => this.generarSKU(e.value, 2)
-        }
+        };
     }
 
   generateNewColorOptions(index: number) {
@@ -183,11 +183,11 @@ export class ProductosComponent implements OnInit {
             displayExpr: 'nombreColor',
             showClearButton : true,
             buttons: [{
-                  name: "trash",
-                  location: "after",
+                  name: 'trash',
+                  location: 'after',
                   options: {
-                      stylingMode: "text",
-                      icon: "trash",
+                      stylingMode: 'text',
+                      icon: 'trash',
                       onClick: () => {
                           this.formData.colores.splice(index, 1);
                           this.colorOptions = this.getColorsOptions(this.formData.colores);
@@ -195,14 +195,14 @@ export class ProductosComponent implements OnInit {
                   }
               }],
             onValueChanged: (e) => this.generarSKU(e.value, 3)
-          }
+          };
       }
 
-  generarSKU(element : string, position : number){
-    (element)?
-      this.sku[position] = element.substring(0,3).toUpperCase()
+  generarSKU(element: string, position: number){
+    (element) ?
+      this.sku[position] = element.substring(0, 3).toUpperCase()
     :
-     this.sku[position] = ""
+     this.sku[position] = ''
     this.formData.SKU = this.sku.join('-');
   }
 

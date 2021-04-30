@@ -6,7 +6,7 @@ import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { AuthService } from '../../services';
 
-const notificationText = 'We\'ve sent a link to reset your password. Check your inbox.';
+const notificationText = 'Hemos enviado un link a tu correo para reestablecer la contraseña.';
 
 @Component({
   selector: 'app-reset-password-form',

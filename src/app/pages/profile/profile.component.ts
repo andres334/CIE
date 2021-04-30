@@ -10,10 +10,10 @@ import { AuthService } from '../../shared/services';
 
 export class ProfileComponent implements OnInit {
   user: Usuario;
-  cargos : [];
+  cargos: [];
   colCountByScreen: object;
 
-  constructor(private authService : AuthService) {
+  constructor(private authService: AuthService) {
     this.colCountByScreen = {
       xs: 1,
       sm: 2,
@@ -25,7 +25,7 @@ export class ProfileComponent implements OnInit {
   ngOnInit(){
     this.authService.getUser().subscribe(
       data => {
-        if(data['data']){
+        if (data['data']){
           this.user = data['data'];
         }else{
           notify(data['message'], 'error', 2000);
@@ -35,7 +35,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getavatarUrl(){
-    if(this.user){
+    if (this.user){
       return this.user.avatarUrl;
     }
   }

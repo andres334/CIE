@@ -18,12 +18,12 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   emailRem = '';
   formData: any = {};
-  user : Usuario ;
+  user: Usuario ;
 
   constructor(private authService: AuthService, private router: Router) { }
 
   ngOnInit(){
-    if(localStorage.getItem('email')){
+    if (localStorage.getItem('email')){
       this.formData.email = localStorage.getItem('email');
       this.formData.rememberMe = true;
     }
@@ -33,14 +33,14 @@ export class LoginFormComponent implements OnInit {
     e.preventDefault();
     this.loading = true;
     const { email, password , rememberMe } = this.formData;
-    this.authService.logIn(email,password).subscribe(
+    this.authService.logIn(email, password).subscribe(
       data => {
         this.loading = false;
-        if(data['data']){
+        if (data['data']){
           this.user = data['data'];
-          this.recuerdame(rememberMe,email);
-          notify('Bienvenido '+this.user.nombreUsuario+ '...!', 'success', 2000);
-          this.router.navigate(['/home']);
+          this.recuerdame(rememberMe, email);
+          notify('Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
+          this.router.navigate([this.authService._lastAuthenticatedPath]);
         }else{
           this.loading = false;
           console.log(data['message']);
@@ -48,16 +48,16 @@ export class LoginFormComponent implements OnInit {
         }
       },
       error => {
-        console.log(error.error.text);
+        console.log(error);
       }
     );
   }
 
-  recuerdame(rememberMe : boolean, email: string){
+  recuerdame(rememberMe: boolean, email: string){
     (rememberMe) ?
-    localStorage.setItem('email',email)
+    localStorage.setItem('email', email)
     :
-    localStorage.removeItem('email')
+    localStorage.removeItem('email');
   }
 
   onCreateAccountClick = () => {

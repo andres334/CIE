@@ -11,25 +11,25 @@ import { RecaudoExt } from '../../models/recaudoext.model';
 export class RecaudoextService {
 
   public domparser = new DOMParser();
-  constructor(private http : HttpClient, private router: Router, private authService : AuthService) { }
+  constructor(private http: HttpClient, private router: Router, private authService: AuthService) { }
 
   getQuery(query: string){
     return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
-    { headers:{ 'Content-Type': 'application/x-www-form-urlencoded' }});
+    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
 
-  postQuery(query: string, body : any){
+  postQuery(query: string, body: any){
     return this.http.post(`https://cie.electroao.com/WSCIE/${query}`, body,
-    { headers:{ 'Content-Type': 'application/json' }});
+    { headers: { 'Content-Type': 'application/json' }});
   }
 
-  getFactura(codigo : string){
+  getFactura(codigo: string){
     return this.getQuery(`RecaudoExt/ObtenerCodigo?token=${this.authService.getToken()}&codigo=${codigo}`).pipe( map( resp => {
-      if (resp['result'] == -1) {
+      if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
-      }else if(resp["result"] == 1){
-        resp['data']=resp['data']['consultar-recaudos-output'];
+      }else if (resp['result'] === 1){
+        resp['data'] = resp['data']['consultar-recaudos-output'];
       }
       return resp;
     }));
@@ -37,7 +37,7 @@ export class RecaudoextService {
 
   getDatosEntidad(){
     return this.getQuery(`RecaudoExt/ObtenerEntidad?token=${this.authService.getToken()}`).pipe( map( resp => {
-      if (resp['result'] == -1) {
+      if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
       }
@@ -45,9 +45,9 @@ export class RecaudoextService {
     }));
   }
 
-  postRecaudo(recaudoExt : RecaudoExt){
+  postRecaudo(recaudoExt: RecaudoExt){
     return this.postQuery(`RecaudoExt/Guardar?token=${this.authService.getToken()}`, recaudoExt).pipe(map( resp => {
-      if (resp['result'] == -1) {
+      if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
       }

@@ -6,10 +6,10 @@ import { Usuario } from '../models';
 })
 export class NonamePipe implements PipeTransform {
 
-  transform( name : Usuario): string {
-    if(!name){
+  transform(name: Usuario): string {
+    if (!name) {
       return '';
-    }else{
+    } else {
       return name.nombreUsuario;
     }
 

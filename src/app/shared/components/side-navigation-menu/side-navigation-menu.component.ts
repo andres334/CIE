@@ -35,14 +35,14 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
   }
 
   private _items;
-  private _menu : [Opciones];
+  private _menu: [Opciones];
   get items() {
     if (!this._items && this._menu !== undefined) {
           this._items = this._menu.map((item) => {
-            if(item.path && !(/^\//.test(item.path))){
+            if (item.path && !(/^\//.test(item.path))){
               item.path = `/${item.path}`;
             }
-             return { ...item, expanded: false }
+            return { ...item, expanded: false };
             });
     }
     return this._items;
@@ -67,7 +67,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
     }
   }
 
-  constructor(private elementRef: ElementRef, private authService : AuthService) {  }
+  constructor(private elementRef: ElementRef, private authService: AuthService) {  }
 
   ngOnInit(){
   }
@@ -80,11 +80,11 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
     events.on(this.elementRef.nativeElement, 'dxclick', (e) => {
       this.openMenu.next(e);
     });
-    
+
     this.loading = true;
     this.authService.getOpciones().subscribe(
       data => {
-        if(data['data']){
+        if (data['data']){
             this._menu = data['data'];
             this.loading = false;
           }else{

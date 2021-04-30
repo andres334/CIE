@@ -25,10 +25,10 @@ export class NotAuthorizedContainerComponent {
   get title() {
     const path = this.router.url.split('/')[1];
     switch (path) {
-      case 'login-form': return 'Sign In';
-      case 'reset-password': return 'Reset Password';
-      case 'create-account': return 'Sign Up';
-      case 'change-password': return 'Change Password';
+      case 'login-form': return 'Ingreso';
+      case 'reset-password': return 'Recuerda tu Contraseña';
+      case 'create-account': return 'Registro';
+      case 'change-password': return 'Cambiar Contraseña';
       case 'document-viewer': return 'Visor de Reportes';
     }
   }
@@ -36,7 +36,7 @@ export class NotAuthorizedContainerComponent {
   get description() {
     const path = this.router.url.split('/')[1];
     switch (path) {
-      case 'reset-password': return 'Please enter the email address that you used to register, and we will send you a link to reset your password via Email.';
+      case 'reset-password': return 'Por favor ingresa la direccion de correo de tu cuenta de usuario, y te enviaremos link a tu correo para continuar con el proceso.';
     }
   }
 }

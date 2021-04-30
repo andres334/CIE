@@ -24,7 +24,7 @@ export class RecaudoextComponent implements OnInit {
 
   @Output()
   idRecaudo: string;
-  //'318818'
+  // '318818'
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -42,7 +42,7 @@ export class RecaudoextComponent implements OnInit {
     private recaudoextService: RecaudoextService,
     private authService: AuthService
   ) {
-    //this.idRecaudo = '-12629196_-1_-12629196_1.pdf';
+    // this.idRecaudo = '-12629196_-1_-12629196_1.pdf';
     this.btnPago = false;
     this.btnRecaudo = true;
     this.popupVisible = true;
@@ -53,7 +53,7 @@ export class RecaudoextComponent implements OnInit {
       if (data['data']) {
         this.user = data['data'];
         this.cajaOptions = {
-          value: data['data'].caja[0].codigoCaja,
+          value: data['data'].caja[0] === undefined ? '' : data['data'].caja[0].codigoCaja,
           items: data['data'].caja,
           valueExpr: 'codigoCaja',
           displayExpr: 'nombreCaja',
@@ -78,13 +78,13 @@ export class RecaudoextComponent implements OnInit {
 
   getLoadingTemplate(texto: string) {
     return (
-      "<div *dxTemplate='let data of 'content''>" +
-      "<span class='dx-button-text'>" +
-      "<ng-container *ngIf='loading; else notLoading'>" +
+      '<div *dxTemplate=\'let data of \'content\'\'>' +
+      '<span class=\'dx-button-text\'>' +
+      '<ng-container *ngIf=\'loading; else notLoading\'>' +
       '<dx-load-indicator' +
-      "width='24px'" +
-      "height='24px'" +
-      "[visible]='true'>" +
+      'width=\'24px\'' +
+      'height=\'24px\'' +
+      '[visible]=\'true\'>' +
       '</dx-load-indicator>' +
       '</ng-container>' +
       '<ng-template #notLoading>' +
@@ -98,9 +98,9 @@ export class RecaudoextComponent implements OnInit {
   buscaFacturas = () => {
     this.loading = true;
     this.recaudoextService.getFactura(this.codigoBarras).subscribe((data) => {
-      if (data['result'] == 1) {
+      if (data['result'] === 1) {
         if (data['data'].recaudo) {
-          let tm = data['data'].recaudo.total_transaccion.length;
+          const tm = data['data'].recaudo.total_transaccion.length;
           data['data'].recaudo.total_transaccion = data[
             'data'
           ].recaudo.total_transaccion.substring(0, tm - 2);
@@ -124,14 +124,14 @@ export class RecaudoextComponent implements OnInit {
         notify(data['message'], 'error', 2000);
         this.loading = false;
       }
-      this.codigoBarras='';
+      this.codigoBarras = '';
     });
-  };
+  }
 
   guardarRecaudo = () => {
     this.loading = true;
     this.recaudoextService.postRecaudo(this.recaudoext).subscribe((data) => {
-      if (data['result'] == 1) {
+      if (data['result'] === 1) {
         console.log(data);
         this.popupPagoVisible = false;
         this.btnPago = false;
@@ -145,19 +145,19 @@ export class RecaudoextComponent implements OnInit {
         this.loading = false;
       }
     });
-  };
+  }
 
   confirmarRecaudo = () => {
     this.popupVisible = false;
     this.popupPagoVisible = true;
-  };
+  }
 
   abrirCamara = () => {
     this.popupCameraVisible = true;
     if (this.hasDevices) {
       this.deviceSelected = this.availableDevices[0].deviceId;
     }
-  };
+  }
 
   cancelarCamara() {
     this.popupCameraVisible = false;
@@ -166,20 +166,20 @@ export class RecaudoextComponent implements OnInit {
   cancelarRecaudo = () => {
     this.popupPagoVisible = false;
     this.btnPago = false;
-  };
+  }
 
   volverEscanear = () => {
     this.popupPagoVisible = false;
     this.btnPago = false;
     this.popupVisible = true;
-  };
+  }
 
   cancelarEscaner = () => {
     this.popupPagoVisible = false;
     this.popupVisible = false;
     this.btnPago = false;
     this.loading = true;
-  };
+  }
 
   onCodeResult(resultString: string) {
     this.deviceSelected = '';
