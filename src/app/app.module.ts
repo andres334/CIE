@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { SideNavOuterToolbarModule, SingleCardModule } from './layouts';
 import { FooterModule, ResetPasswordFormModule, CreateAccountFormModule, ChangePasswordFormModule,
    LoginFormModule, DocumentViewerModule } from './shared/components';
-import { AuthService, ScreenService, AppInfoService, ProductosService, RecaudoextService } from './shared/services';
+import { AuthService, ScreenService, AppInfoService, ProductosService, RecaudoextService, PedidoService } from './shared/services';
 import { UnauthenticatedContentModule } from './unauthenticated-content';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule} from '@angular/common/http';
@@ -32,7 +32,7 @@ import { MainPipe } from './main-pipe.module';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AuthService, ScreenService, AppInfoService, ProductosService, RecaudoextService],
+  providers: [AuthService, ScreenService, AppInfoService, ProductosService, RecaudoextService, PedidoService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

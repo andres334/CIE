@@ -7,19 +7,18 @@ import { AuthService } from './auth.service';
   providedIn: 'root'
 })
 export class ProductosService {
-  datasource: any;
-  constructor( private http : HttpClient , private authService : AuthService) { }
+  constructor( private http: HttpClient , private authService: AuthService) { }
 
   getQuery(query: string){
     return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
-    { headers:{ 'Content-Type': 'application/x-www-form-urlencoded' }});
+    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
 
-  getCategorias () {
+  getCategorias() {
     return this.getQuery(`Producto/Obtener?token=${this.authService.getToken()}`).pipe( map (
       resp => {
-        if(resp['data']){
-          this.datasource = resp['data'];
+        if (resp['data']){
+          // this.datasource = resp['data'];
           return resp;
         }
       }

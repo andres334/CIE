@@ -64,6 +64,26 @@ export class AuthService {
     }));
   }
 
+  getCaja() {
+    return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe( map( resp => {
+      if (resp['result'] === -1) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login-form']);
+      }
+      return resp;
+    }));
+  }
+
+  getSucursal() {
+    return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe( map( resp => {
+      if (resp['result'] === -1) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login-form']);
+      }
+      return resp;
+    }));
+  }
+
   setToken( token: string){
     localStorage.setItem('token', token);
   }

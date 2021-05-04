@@ -1,41 +1,40 @@
 <div class="content-block dx-card responsive-paddings">
-  <dx-form id="form" [formData]="formData" [colCount]="2" [disabled]="loading">
-
-    <dxi-item itemType="group" caption="Producto" [colCount]="2">
-      <dxi-item itemType="group">
-        <dxi-item dataField="SKU" [editorOptions]="{ disabled: true }" ></dxi-item>
-        <dxi-item dataField="Nombre"></dxi-item>
-        <dxi-item dataField="modelo" [editorOptions]="modeloOptions"></dxi-item>
-        <dxi-item dataField="marca" editorType="dxSelectBox" [editorOptions]="marcasOptions"></dxi-item>
-      </dxi-item>
-      <dxi-item itemType="group">
-        <dxi-item dataField="linea" editorType="dxSelectBox" [editorOptions]="lineasOptions"></dxi-item>
-        <dxi-item dataField="grupo" editorType="dxSelectBox" [editorOptions]="gruposOptions"></dxi-item>
-        <dxi-item dataField="subgrupo" editorType="dxSelectBox" [editorOptions]="subgruposOptions"></dxi-item>
-        <dxi-item editorType="dxCheckBox" [editorOptions]="chkcolorOptions"></dxi-item>
-        <dxi-item editorType="dxCheckBox" [editorOptions]="chktallaOptions"></dxi-item>
-      </dxi-item>
-    </dxi-item>
-
-    <dxi-item itemType="group" caption="Caracteristicas">
-      <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
-      <dxi-item itemType="group" caption="Colores" [visible]="isColorVisible">
-        <dxi-item itemType="group" *ngFor="let color of colorOptions; let i = index">
-          <dxi-item [dataField]="'colores[' + i + ']'" editorType="dxSelectBox" [editorOptions]="colorOptions[i]">
-            <dxo-label [text]="'Color ' + (i + 1)"></dxo-label>
-          </dxi-item>
+    <dx-form id="form" [formData]="formData" [colCount]="2" [disabled]="loading">
+        <dxi-item itemType="group" caption="Producto" [colCount]="2">
+            <dxi-item itemType="group">
+                <dxi-item dataField="SKU" [editorOptions]="{ disabled: true }"></dxi-item>
+                <dxi-item dataField="Nombre"></dxi-item>
+                <dxi-item dataField="modelo" [editorOptions]="modeloOptions"></dxi-item>
+                <dxi-item dataField="marca" editorType="dxSelectBox" [editorOptions]="marcasOptions"></dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group">
+                <dxi-item dataField="linea" editorType="dxSelectBox" [editorOptions]="lineasOptions"></dxi-item>
+                <dxi-item dataField="grupo" editorType="dxSelectBox" [editorOptions]="gruposOptions"></dxi-item>
+                <dxi-item dataField="subgrupo" editorType="dxSelectBox" [editorOptions]="subgruposOptions"></dxi-item>
+                <dxi-item editorType="dxCheckBox" [editorOptions]="chkcolorOptions"></dxi-item>
+                <dxi-item editorType="dxCheckBox" [editorOptions]="chktallaOptions"></dxi-item>
+            </dxi-item>
         </dxi-item>
-        <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="addColorBtnOptions"></dxi-item>
-      </dxi-item>
 
-      <dxi-item itemType="group" caption="Tallas" [visible]="isTallaVisible">
-        <dxi-item itemType="group" *ngFor="let talla of tallaOptions; let i = index">
-          <dxi-item [dataField]="'tallas[' + i + ']'" editorType="dxSelectBox" [editorOptions]="tallaOptions[i]">
-            <dxo-label [text]="'talla ' + (i + 1)"></dxo-label>
-          </dxi-item>
+        <dxi-item itemType="group" caption="Caracteristicas">
+            <dxi-item itemType="empty" [colSpan]="2"></dxi-item>
+            <dxi-item itemType="group" caption="Colores" [visible]="isColorVisible">
+                <dxi-item itemType="group" *ngFor="let color of colorOptions; let i = index">
+                    <dxi-item [dataField]="'colores[' + i + ']'" editorType="dxSelectBox" [editorOptions]="colorOptions[i]">
+                        <dxo-label [text]="'Color ' + (i + 1)"></dxo-label>
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="addColorBtnOptions"></dxi-item>
+            </dxi-item>
+
+            <dxi-item itemType="group" caption="Tallas" [visible]="isTallaVisible">
+                <dxi-item itemType="group" *ngFor="let talla of tallaOptions; let i = index">
+                    <dxi-item [dataField]="'tallas[' + i + ']'" editorType="dxSelectBox" [editorOptions]="tallaOptions[i]">
+                        <dxo-label [text]="'talla ' + (i + 1)"></dxo-label>
+                    </dxi-item>
+                </dxi-item>
+                <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="addTallaBtnOptions"></dxi-item>
+            </dxi-item>
         </dxi-item>
-        <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="addTallaBtnOptions"></dxi-item>
-      </dxi-item>
-    </dxi-item>
-  </dx-form>
+    </dx-form>
 </div>

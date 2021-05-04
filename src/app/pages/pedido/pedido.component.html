@@ -1,1 +1,49 @@
-<p>pedido works!</p>
+<div class="content-block dx-card responsive-paddings">
+    <dx-form id="form" [formData]="formData" [disabled]="loading">
+        <dxi-item itemType="group" caption="Pedido" [colCount]="4">
+            <dxi-item dataField="Tipo" editorType="dxSelectBox" [editorOptions]="tipoOptions"></dxi-item>
+            <dxi-item dataField="Sucursal" editorType="dxSelectBox" [editorOptions]="sucursalOptions"></dxi-item>
+            <dxi-item dataField="Fecha" editorType="dxDateBox" [editorOptions]="{ width: '100%', disabled: true}"></dxi-item>
+            <dxi-item dataField="Estado" editorType="dxSelectBox" [editorOptions]="estadoOptions"></dxi-item>
+            <dxi-item dataField="Vendedor" [colSpan]="2" editorType="dxSelectBox" [editorOptions]="vendedorOptions"></dxi-item>
+            <dxi-item dataField="Documento" editorType="dxSelectBox" [editorOptions]="documentoOptions"></dxi-item>
+            <dxi-item dataField="Consecutivo" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="" [colCount]="4">
+            <dxi-item dataField="cliente" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="Direccion" editorType="dxSelectBox" [editorOptions]="direccionOptions"></dxi-item>
+            <dxi-item dataField="FechaEntrega" editorType="dxDateBox" [editorOptions]="{ width: '100%'}"></dxi-item>
+            <dxi-item dataField="Descripcion" [colSpan]="2"></dxi-item>
+            <dxi-item dataField="Plazo" editorType="dxSelectBox" [editorOptions]="plazoOptions"></dxi-item>
+            <dxi-item dataField="Dias" [editorOptions]="{ disabled: true }"></dxi-item>
+        </dxi-item>
+        <dxi-item itemType="group" caption="">
+            <dx-data-grid id="gridContainer" [dataSource]="dataSource" keyExpr="ID" [showBorders]="true" [columnAutoWidth]="true" (onEditorPreparing)="onEditorPreparing($event)">
+                <dxo-paging [enabled]="false"></dxo-paging>
+                <dxo-editing mode="batch" [allowAdding]="true" [allowUpdating]="true" [allowDeleting]="true" [selectTextOnEditStart]="true" [startEditAction]="startEditAction">
+                </dxo-editing>
+                <dxi-column dataField="producto" [setCellValue]="setProductoValue">
+                    <dxo-lookup [dataSource]="productos" displayExpr="NombreProducto" valueExpr="CodigoProducto">
+                    </dxo-lookup>
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-column>
+                <dxi-column dataField="kit" dataType="boolean" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="color">
+                    <dxo-lookup [dataSource]="colores" displayExpr="NombreColor" valueExpr="CodigoColor">
+                    </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="cantidad" dataType="number"></dxi-column>
+                <dxi-column dataField="valorUnitario" dataType="number"></dxi-column>
+                <dxi-column dataField="descuento" dataType="number"></dxi-column>
+                <dxi-column dataField="iva" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="valorIva" dataType="number" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="otros" dataType="number" [allowEditing]="false"></dxi-column>
+                <dxi-column dataField="valorTotal" dataType="number" [calculateCellValue]="valorTotal_calculado"></dxi-column>
+                <dxo-summary>
+                    <dxi-total-item column="valorTotal" summaryType="sum" valueFormat="currency">
+                    </dxi-total-item>
+                </dxo-summary>
+            </dx-data-grid>
+        </dxi-item>
+    </dx-form>
+</div>

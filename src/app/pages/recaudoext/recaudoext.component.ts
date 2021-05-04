@@ -49,14 +49,13 @@ export class RecaudoextComponent implements OnInit {
     this.popupPagoVisible = false;
     this.popupCameraVisible = false;
     this.popupRecaudoVisible = false;
-    this.authService.getUser().subscribe((data) => {
+    this.authService.getCaja().subscribe((data) => {
       if (data['data']) {
-        this.user = data['data'];
         this.cajaOptions = {
-          value: data['data'].caja[0] === undefined ? '' : data['data'].caja[0].codigoCaja,
-          items: data['data'].caja,
+          value: data['data'] === undefined ? '' : data['data'].codigoCaja,
+          items: data['data'],
           valueExpr: 'codigoCaja',
-          displayExpr: 'nombreCaja',
+          displayExpr: 'nombreCaja'
         };
       } else {
         notify(data['message'], 'error', 2000);
@@ -68,7 +67,7 @@ export class RecaudoextComponent implements OnInit {
           value: data['data'][0].codigoEntidad,
           items: data['data'],
           valueExpr: 'codigoEntidad',
-          displayExpr: 'nombreEntidad',
+          displayExpr: 'nombreEntidad'
         };
       }
     });
