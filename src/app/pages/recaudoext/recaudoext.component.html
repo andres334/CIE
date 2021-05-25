@@ -1,240 +1,121 @@
 <div class="content-block dx-card responsive-paddings">
-  <dx-form
-    id="form"
-    [formData]="recaudoext"
-    [disabled]="loading"
-    [showValidationSummary]="true"
-    validationGroup="recaudoData"
-  >
-    <dxi-item itemType="group" [colCount]="2">
-      <dxi-item
-        dataField="CodigoEntidad"
-        editorType="dxSelectBox"
-        [editorOptions]="entidadOptions"
-      >
-        <dxi-validation-rule
-          type="required"
-          message="La Entidad Recaudadora es requerida"
-        ></dxi-validation-rule>
-      </dxi-item>
-      <dxi-item
-        dataField="CodigoCaja"
-        editorType="dxSelectBox"
-        [editorOptions]="cajaOptions"
-      >
-        <dxi-validation-rule
-          type="required"
-          message="La Caja es requerida"
-        ></dxi-validation-rule>
-      </dxi-item>
-    </dxi-item>
-    <dxi-item itemType="group" [colCount]="3" [visible]="!popupVisible">
-      <dxi-item dataField="Referencia" [editorOptions]="{ disabled: true }">
-        <dxi-validation-rule
-          type="required"
-          message="La Referencia es requerida"
-        ></dxi-validation-rule>
-      </dxi-item>
-      <dxi-item
-        dataField="Contrato"
-        [editorOptions]="{ disabled: true }"
-      ></dxi-item>
-      <dxi-item
-        dataField="FechaVencimiento"
-        editorType="dxDateBox"
-        [editorOptions]="{ disabled: true }"
-      ></dxi-item>
-      <dxi-item
-        dataField="Direccion"
-        [editorOptions]="{ disabled: true }"
-      ></dxi-item>
-      <dxi-item dataField="ValorTotal" [editorOptions]="{ disabled: true }">
-        <dxi-validation-rule
-          type="required"
-          message="El Valor a Pagar es requerido"
-        ></dxi-validation-rule>
-      </dxi-item>
-    </dxi-item>
-    <dxi-item itemType="empty" [colSpan]="3"></dxi-item>
-    <dxi-item itemType="group" [template]="'buttonTemplate'"></dxi-item>
-    <div *dxTemplate="let data of 'buttonTemplate'">
-      <dx-box direction="row" align="end">
-        <dxi-item [ratio]="0" baseSize="50%">
-          <dx-button
-            icon="print"
-            type="success"
-            text="Imprimir"
-            (onClick)="mostrarRecaudo()"
-            [visible]="btnRecaudo"
-          >
-          </dx-button>
-          <dx-button
-            icon="check"
-            type="success"
-            text="Pagar"
-            (onClick)="confirmarRecaudo()"
-            [visible]="btnPago"
-          >
-          </dx-button>
-          <dx-button
-            icon="refresh"
-            type="danger"
-            text="Volver a Escanear"
-            (onClick)="volverEscanear()"
-          >
-          </dx-button>
+    <dx-form id="form" [formData]="recaudoext" [disabled]="loading" [showValidationSummary]="true" validationGroup="recaudoData">
+        <dxi-item itemType="group" [colCount]="2">
+            <dxi-item dataField="CodigoEntidad" editorType="dxSelectBox" [editorOptions]="entidadOptions">
+                <dxi-validation-rule type="required" message="La Entidad Recaudadora es requerida"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="CodigoCaja" editorType="dxSelectBox" [editorOptions]="cajaOptions">
+                <dxi-validation-rule type="required" message="La Caja es requerida"></dxi-validation-rule>
+            </dxi-item>
         </dxi-item>
-      </dx-box>
-    </div>
-  </dx-form>
-  <dx-popup
-    title="Informacion"
-    fullscreen="false"
-    [height]="250"
-    [maxWidth]="450"
-    [dragEnabled]="false"
-    [disabled]="loading"
-    [closeOnOutsideClick]="false"
-    [visible]="popupVisible"
-    [showTitle]="true"
-    [showCloseButton]="false"
-  >
-    <div *dxTemplate="let data of 'content'">
-      <p>
-        Bienvenido! presione Confirmar una vez haya Escaneado la factura con su
-        telefono...!
-      </p>
-      <dx-box direction="row">
-        <dxi-item [ratio]="1">
-          <dx-button
-            type="default"
-            text="Camara"
-            (onClick)="abrirCamara()"
-          ></dx-button>
+        <dxi-item itemType="group" [colCount]="3" [visible]="!popupVisible">
+            <dxi-item dataField="Referencia" [editorOptions]="{ disabled: true }">
+                <dxi-validation-rule type="required" message="La Referencia es requerida"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="Contrato" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="FechaVencimiento" editorType="dxDateBox" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Direccion" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="ValorTotal" [editorOptions]="{ disabled: true }">
+                <dxi-validation-rule type="required" message="El Valor a Pagar es requerido"></dxi-validation-rule>
+            </dxi-item>
         </dxi-item>
-        <dxi-item [ratio]="1">
-          <dx-button
-            type="success"
-            text="Continuar"
-            (onClick)="buscaFacturas()"
-          >
-            <div *dxTemplate="let data of 'content'">
-              <span class="dx-button-text">
+        <dxi-item itemType="empty" [colSpan]="3"></dxi-item>
+        <dxi-item itemType="group" [template]="'buttonTemplate'"></dxi-item>
+        <div *dxTemplate="let data of 'buttonTemplate'">
+            <dx-box direction="row" align="end">
+                <dxi-item [ratio]="0" baseSize="50%">
+                    <dx-button icon="print" type="success" text="Imprimir" (onClick)="imprimir()" [visible]="btnImprimir">
+                        <div *dxTemplate="let data of 'content'">
+                            <span class="dx-button-text">
+                <ng-container *ngIf="loading; else notLoading">
+                  <dx-load-indicator [visible]="true"></dx-load-indicator>
+                </ng-container>
+                <ng-template #notLoading>Imprimir</ng-template>
+              </span>
+                        </div>
+                    </dx-button>
+                    <dx-button icon="check" type="success" text="Pagar" (onClick)="confirmarRecaudo()" [visible]="btnPago">
+                    </dx-button>
+                    <dx-button icon="refresh" type="danger" text="Volver a Escanear" (onClick)="volverEscanear()">
+                    </dx-button>
+                </dxi-item>
+            </dx-box>
+        </div>
+    </dx-form>
+    <dx-popup title="Informacion" fullscreen="false" [height]="250" [maxWidth]="450" [dragEnabled]="false" [disabled]="loading" [closeOnOutsideClick]="false" [visible]="popupVisible" [showTitle]="true" [showCloseButton]="false">
+        <div *dxTemplate="let data of 'content'">
+            <p>
+                Bienvenido! presione Confirmar una vez haya Escaneado la factura con su telefono...!
+            </p>
+            <dx-box direction="row">
+                <dxi-item [ratio]="1">
+                    <dx-button type="default" text="Camara" (onClick)="abrirCamara()"></dx-button>
+                </dxi-item>
+                <dxi-item [ratio]="1">
+                    <dx-button type="success" text="Continuar" (onClick)="buscaFacturas()">
+                        <div *dxTemplate="let data of 'content'">
+                            <span class="dx-button-text">
                 <ng-container *ngIf="loading; else notLoading">
                   <dx-load-indicator [visible]="true"></dx-load-indicator>
                 </ng-container>
                 <ng-template #notLoading>Continuar</ng-template>
               </span>
-            </div>
-          </dx-button>
-        </dxi-item>
-        <dxi-item [ratio]="1">
-          <dx-button
-            type="danger"
-            text="Cancelar"
-            (onClick)="cancelarEscaner()"
-          >
-          </dx-button>
-        </dxi-item>
-      </dx-box>
-    </div>
-  </dx-popup>
-  <dx-popup
-    title="Informacion"
-    fullscreen="false"
-    [height]="250"
-    [maxWidth]="450"
-    [dragEnabled]="false"
-    [disabled]="loading"
-    [closeOnOutsideClick]="false"
-    [visible]="popupPagoVisible"
-    [showTitle]="true"
-    [showCloseButton]="false"
-  >
-    <div *dxTemplate="let data of 'content'">
-      <p>
-        Confirme el Recibido de los
-        {{ recaudoext.ValorTotal | currency: "USD":"symbol":"1.0" }} pesos para
-        continuar con el pago!
-      </p>
-      <dx-box direction="row">
-        <dxi-item [ratio]="1">
-          <dx-button
-            type="success"
-            text="Confirmar"
-            (onClick)="guardarRecaudo()"
-          >
-            <div *dxTemplate="let data of 'content'">
-              <span class="dx-button-text">
+                        </div>
+                    </dx-button>
+                </dxi-item>
+                <dxi-item [ratio]="1">
+                    <dx-button type="danger" text="Cancelar" (onClick)="cancelarEscaner()">
+                    </dx-button>
+                </dxi-item>
+            </dx-box>
+        </div>
+    </dx-popup>
+    <dx-popup title="Informacion" fullscreen="false" [height]="250" [maxWidth]="450" [dragEnabled]="false" [disabled]="loading" [closeOnOutsideClick]="false" [visible]="popupPagoVisible" [showTitle]="true" [showCloseButton]="false">
+        <div *dxTemplate="let data of 'content'">
+            <p>
+                Confirme el Recibido de los {{ recaudoext.ValorTotal | currency: "USD":"symbol":"1.0" }} pesos para continuar con el pago!
+            </p>
+            <dx-box direction="row">
+                <dxi-item [ratio]="1">
+                    <dx-button type="success" text="Confirmar" (onClick)="guardarRecaudo()">
+                        <div *dxTemplate="let data of 'content'">
+                            <span class="dx-button-text">
                 <ng-container *ngIf="loading; else notLoading">
                   <dx-load-indicator [visible]="true"></dx-load-indicator>
                 </ng-container>
                 <ng-template #notLoading>Recibido</ng-template>
               </span>
+                        </div>
+                    </dx-button>
+                </dxi-item>
+                <dxi-item [ratio]="1">
+                    <dx-button type="danger" text="Cancelar" (onClick)="cancelarRecaudo()">
+                    </dx-button>
+                </dxi-item>
+            </dx-box>
+        </div>
+    </dx-popup>
+    <dx-popup title="Camara" fullscreen="false" [dragEnabled]="false" [disabled]="loading" [closeOnOutsideClick]="false" [visible]="popupCameraVisible" [showTitle]="true" [showCloseButton]="false">
+        <div *dxTemplate="let data of 'content'">
+            <div [hidden]="!hasDevices">
+                <zxing-scanner [device]="deviceSelected" (scanSuccess)="onCodeResult($event)" [formats]="formatsEnabled" (permissionResponse)="onHasPermission($event)" (camerasFound)="onCamerasFound($event)"></zxing-scanner>
             </div>
-          </dx-button>
-        </dxi-item>
-        <dxi-item [ratio]="1">
-          <dx-button
-            type="danger"
-            text="Cancelar"
-            (onClick)="cancelarRecaudo()"
-          >
-          </dx-button>
-        </dxi-item>
-      </dx-box>
-    </div>
-  </dx-popup>
-  <dx-popup
-    title="Camara"
-    fullscreen="false"
-    [dragEnabled]="false"
-    [disabled]="loading"
-    [closeOnOutsideClick]="false"
-    [visible]="popupCameraVisible"
-    [showTitle]="true"
-    [showCloseButton]="false"
-  >
-    <div *dxTemplate="let data of 'content'">
-      <div [hidden]="!hasDevices">
-        <zxing-scanner
-          [device]="deviceSelected"
-          (scanSuccess)="onCodeResult($event)"
-          [formats]="formatsEnabled"
-          (permissionResponse)="onHasPermission($event)"
-          (camerasFound)="onCamerasFound($event)"
-        ></zxing-scanner>
-      </div>
-      <ng-container *ngIf="hasPermission === undefined">
-        <h2>Esperando Permisos...</h2>
-      </ng-container>
-      <ng-container *ngIf="hasDevices === undefined">
-        <h2>Verificando disposivos</h2>
-      </ng-container>
-      <ng-container *ngIf="hasDevices === false">
-        <h2>No Hay Dispositivos!</h2>
-      </ng-container>
-      <dx-button
-        type="danger"
-        text="Cancelar"
-        width="100%"
-        (onClick)="cancelarCamara()"
-      >
-      </dx-button>
-    </div>
-  </dx-popup>
-  <dx-popup
-    title="Reporte"
-    fullscreen="true"
-    [dragEnabled]="false"
-    [disabled]="loading"
-    [closeOnOutsideClick]="false"
-    [visible]="popupRecaudoVisible"
-    [showTitle]="true"
-    [showCloseButton]="true"
-  >
-    <div *dxTemplate="let data of 'content'">
-      <app-document-viewer [pdfname]="idRecaudo"></app-document-viewer>
-    </div>
-  </dx-popup>
+            <ng-container *ngIf="hasPermission === undefined">
+                <h2>Esperando Permisos...</h2>
+            </ng-container>
+            <ng-container *ngIf="hasDevices === undefined">
+                <h2>Verificando disposivos</h2>
+            </ng-container>
+            <ng-container *ngIf="hasDevices === false">
+                <h2>No Hay Dispositivos!</h2>
+            </ng-container>
+            <dx-button type="danger" text="Cancelar" width="100%" (onClick)="cancelarCamara()">
+            </dx-button>
+        </div>
+    </dx-popup>
+    <dx-popup title="Reporte" fullscreen="true" [dragEnabled]="false" [disabled]="loading" [closeOnOutsideClick]="false" [visible]="popupRecaudoVisible" [showTitle]="true" [showCloseButton]="true">
+        <div *dxTemplate="let data of 'content'">
+            <app-document-viewer [pdfname]="idRecaudo"></app-document-viewer>
+        </div>
+    </dx-popup>
 </div>
