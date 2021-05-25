@@ -22,6 +22,8 @@ export class PedidoComponent implements OnInit {
     Descripcion: '',
     Plazo: 0
   };
+
+  //hola
   loading: boolean;
   tipoOptions: any;
   sucursalOptions: any;
