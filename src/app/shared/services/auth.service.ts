@@ -88,9 +88,9 @@ export class AuthService {
   setToken( token: string){
     this.storage.set('token', token).subscribe(() => {});
   }
-  
+
   getToken(){
-    //return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
+    // return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
     this.storage.get('token').subscribe((data) => {
       return data ;
     });
