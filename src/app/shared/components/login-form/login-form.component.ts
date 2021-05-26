@@ -6,6 +6,7 @@ import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { Usuario } from 'src/app/models';
 import { AuthService } from '../../services';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 
 @Component({
@@ -18,30 +19,29 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   emailRem = '';
   formData: any = {};
-  user: Usuario ;
+  user: Usuario;
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private storage: StorageMap) { }
 
-  ngOnInit(){
-    if (localStorage.getItem('email')){
-      this.formData.email = localStorage.getItem('email');
+  ngOnInit() {
+    this.storage.get('email').subscribe((data) => {
+      this.formData.email = data;
       this.formData.rememberMe = true;
-    }
+    });
   }
 
   onSubmit(e) {
     e.preventDefault();
     this.loading = true;
-    const { email, password , rememberMe } = this.formData;
+    const { email, password, rememberMe } = this.formData;
     this.authService.logIn(email, password).subscribe(
       data => {
         this.loading = false;
-        if (data['data']){
+        if (data['data']) {
           this.user = data['data'];
           this.recuerdame(rememberMe, email);
           notify('Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
-          this.router.navigate([this.authService._lastAuthenticatedPath]);
-        }else{
+        } else {
           this.loading = false;
           console.log(data['message']);
           notify(data['message'], 'error', 2000);
@@ -53,11 +53,11 @@ export class LoginFormComponent implements OnInit {
     );
   }
 
-  recuerdame(rememberMe: boolean, email: string){
+  recuerdame(rememberMe: boolean, email: string) {
     (rememberMe) ?
-    localStorage.setItem('email', email)
-    :
-    localStorage.removeItem('email');
+      this.storage.set('email', email).subscribe(() => { })
+      :
+      this.storage.delete('email').subscribe(() => { });
   }
 
   onCreateAccountClick = () => {
@@ -71,7 +71,7 @@ export class LoginFormComponent implements OnInit {
     DxFormModule,
     DxLoadIndicatorModule
   ],
-  declarations: [ LoginFormComponent ],
-  exports: [ LoginFormComponent ]
+  declarations: [LoginFormComponent],
+  exports: [LoginFormComponent]
 })
 export class LoginFormModule { }
