@@ -1,8 +1,10 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { HttpEventType } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
-import { Usuario, RecaudoExt } from 'src/app/models';
+import { Usuario, RecaudoExt, ProgressStatus } from 'src/app/models';
 import { RecaudoextService, AuthService } from '../../shared/services';
 import { BarcodeFormat } from '@zxing/library';
+import { ProgressStatusEnum } from '../../models/progress.model';
 
 @Component({
   templateUrl: './recaudoext.component.html',
@@ -11,6 +13,7 @@ import { BarcodeFormat } from '@zxing/library';
 export class RecaudoextComponent implements OnInit {
   user: Usuario;
   loading: boolean;
+  // recaudoext: RecaudoExt = new RecaudoExt('AO', 890101691, 48255337, 186993473, 'KR44 CL27 C-35', 'C004-00', new Date(), 5593);
   recaudoext: RecaudoExt = new RecaudoExt('', 0, 0, 0, '', '', new Date(), 0);
   entidadOptions: any;
   cajaOptions: any;
@@ -20,11 +23,13 @@ export class RecaudoextComponent implements OnInit {
   popupRecaudoVisible: boolean;
   btnPago: boolean;
   btnRecaudo: boolean;
+  btnImprimir: boolean;
   codigoBarras = '';
 
-  @Output()
-  idRecaudo: string;
+  @Output() idRecaudo = '';
   // '318818'
+
+  @Output() public downloadStatus: EventEmitter<ProgressStatus>;
 
   formatsEnabled: BarcodeFormat[] = [
     BarcodeFormat.CODE_128,
@@ -45,6 +50,7 @@ export class RecaudoextComponent implements OnInit {
     // this.idRecaudo = '-12629196_-1_-12629196_1.pdf';
     this.btnPago = false;
     this.btnRecaudo = true;
+    this.btnImprimir = false;
     this.popupVisible = true;
     this.popupPagoVisible = false;
     this.popupCameraVisible = false;
@@ -53,12 +59,12 @@ export class RecaudoextComponent implements OnInit {
       if (data['data']) {
         this.cajaOptions = {
           value: data['data'] === undefined ? '' : data['data'].codigoCaja,
-          items: data['data'],
+          items: [data['data']],
           valueExpr: 'codigoCaja',
           displayExpr: 'nombreCaja'
         };
       } else {
-        notify(data['message'], 'error', 2000);
+        notify(data['message'], 'error', 3000);
       }
     });
     this.recaudoextService.getDatosEntidad().subscribe((data) => {
@@ -73,7 +79,7 @@ export class RecaudoextComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   getLoadingTemplate(texto: string) {
     return (
@@ -96,6 +102,11 @@ export class RecaudoextComponent implements OnInit {
 
   buscaFacturas = () => {
     this.loading = true;
+
+    // this.popupVisible = false;
+    // this.btnPago = true;
+    // this.loading = false;
+    // return;
     this.recaudoextService.getFactura(this.codigoBarras).subscribe((data) => {
       if (data['result'] === 1) {
         if (data['data'].recaudo) {
@@ -115,12 +126,12 @@ export class RecaudoextComponent implements OnInit {
         } else {
           this.popupVisible = true;
           this.btnPago = false;
-          notify(data['data'].error_descripcion, 'warning', 2000);
+          notify(data['data'].error_descripcion, 'warning', 3000);
           this.loading = false;
         }
       } else {
         this.btnPago = false;
-        notify(data['message'], 'error', 2000);
+        notify(data['message'], 'error', 3000);
         this.loading = false;
       }
       this.codigoBarras = '';
@@ -129,21 +140,26 @@ export class RecaudoextComponent implements OnInit {
 
   guardarRecaudo = () => {
     this.loading = true;
-    this.recaudoextService.postRecaudo(this.recaudoext).subscribe((data) => {
-      if (data['result'] === 1) {
-        console.log(data);
-        this.popupPagoVisible = false;
-        this.btnPago = false;
-        this.btnRecaudo = true;
-        this.idRecaudo = data['data'];
-        notify('Guardado Correctamente', 'success', 2000);
-        this.loading = false;
-      } else {
-        this.btnPago = false;
-        notify(data['message'], 'error', 2000);
-        this.loading = false;
-      }
-    });
+    if (this.recaudoext.CodigoCaja !== '') {
+      this.recaudoextService.postRecaudo(this.recaudoext).subscribe((data) => {
+        if (data['result'] === 1) {
+          console.log(data);
+          this.popupPagoVisible = false;
+          this.btnPago = false;
+          this.btnRecaudo = true;
+          this.idRecaudo = data['data'];
+          this.btnImprimir = true;
+          notify('Guardado Correctamente', 'success', 2000);
+          this.loading = false;
+        } else {
+          this.btnPago = false;
+          notify(data['message'], 'error', 2000);
+          this.loading = false;
+        }
+      });
+    } else {
+      notify('no tiene caja asignada', 'error', 2000);
+    }
   }
 
   confirmarRecaudo = () => {
@@ -171,6 +187,8 @@ export class RecaudoextComponent implements OnInit {
     this.popupPagoVisible = false;
     this.btnPago = false;
     this.popupVisible = true;
+    this.btnImprimir = false;
+    this.idRecaudo = '';
   }
 
   cancelarEscaner = () => {
@@ -178,6 +196,22 @@ export class RecaudoextComponent implements OnInit {
     this.popupVisible = false;
     this.btnPago = false;
     this.loading = true;
+  }
+
+  imprimir = () => {
+    this.loading = true;
+    this.recaudoextService.getRecaudo(this.idRecaudo).subscribe((data: any) => {
+      const downloadedFile = new Blob([data], { type: data.type });
+      const a = document.createElement('a');
+      a.setAttribute('style', 'display:none;');
+      document.body.appendChild(a);
+      a.download = this.idRecaudo + '.pdf';
+      a.href = URL.createObjectURL(downloadedFile);
+      a.target = '_blank';
+      a.click();
+      document.body.removeChild(a);
+      this.loading = false;
+    });
   }
 
   onCodeResult(resultString: string) {
@@ -200,7 +234,7 @@ export class RecaudoextComponent implements OnInit {
     this.hasPermission = has;
   }
 
-  mostrarRecaudo(){
+  mostrarRecaudo() {
     this.popupRecaudoVisible = true;
   }
 }

@@ -29,6 +29,7 @@ export class RecaudoextService {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
       }else if (resp['result'] === 1){
+        resp['data'] = JSON.parse(resp['data']);
         resp['data'] = resp['data']['consultar-recaudos-output'];
       }
       return resp;
@@ -53,5 +54,11 @@ export class RecaudoextService {
       }
       return resp;
     }));
+  }
+
+  getRecaudo(id: string){
+    return this.http.get(`https://cie.electroao.com/WSCIE/RecaudoExt/Imprimir?id=${id}`,
+     {  headers: { 'Content-Type': 'application/x-www-form-urlencoded' } ,
+      responseType : 'blob'});
   }
 }

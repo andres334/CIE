@@ -7,7 +7,7 @@
             <dxi-item dataField="Estado" editorType="dxSelectBox" [editorOptions]="estadoOptions"></dxi-item>
             <dxi-item dataField="Vendedor" [colSpan]="2" editorType="dxSelectBox" [editorOptions]="vendedorOptions"></dxi-item>
             <dxi-item dataField="Documento" editorType="dxSelectBox" [editorOptions]="documentoOptions"></dxi-item>
-            <dxi-item dataField="Consecutivo" [editorOptions]="{ disabled: true }"></dxi-item>
+            <dxi-item dataField="Consecutivo" [editorOptions]="{ disabled: true, value: consecutivo }"></dxi-item>
         </dxi-item>
         <dxi-item itemType="group" caption="" [colCount]="4">
             <dxi-item dataField="cliente" [colSpan]="2"></dxi-item>

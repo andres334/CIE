@@ -22,12 +22,15 @@ export class PedidoComponent implements OnInit {
     Descripcion: '',
     Plazo: 0
   };
+
+  //hola
   loading: boolean;
   tipoOptions: any;
   sucursalOptions: any;
   estadoOptions: any;
   documentos: any;
   documentoOptions: any;
+  consecutivo = 0;
   vendedorOptions: any;
   direccionOptions: any;
   plazoOptions: any;
@@ -56,13 +59,14 @@ export class PedidoComponent implements OnInit {
         data['data'].forEach((s) => {
           documentos.push({
             codigoSucursal: s.codigoSucursal,
-            Documento: s.Documento
+            Documento: s.Documento,
+            Consecutivo: s.Consecutivo
           });
         });
         documentos = documentos.filter(
           (s, i, arr) => arr.findIndex(t => t.Documento === s.Documento) === i
         );
-        console.log(sucursales);
+        this.documentos = this.filterBySucursal(documentos, sucursales[0].codigoSucursal);
         this.sucursalOptions = {
           value: sucursales === undefined ? '' : sucursales[0].codigoSucursal,
           items: sucursales,
@@ -75,11 +79,16 @@ export class PedidoComponent implements OnInit {
         this.documentoOptions = {
           items: this.documentos,
           value: '',
-          valueExpr: 'Documento'
+          valueExpr: 'Documento',
+          displayExpr: 'Documento',
+          onValueChanged: (e) => {
+            this.consecutivo = this.filterByDocumento(documentos, e.value)[0].Consecutivo;
+          }
         };
       } else {
         notify(data['message'], 'error', 2000);
       }
+      this.loading = false;
     });
     this.pedidoService.getProductos().subscribe(datap => {
       if (datap['data']) {
@@ -93,10 +102,8 @@ export class PedidoComponent implements OnInit {
       { CodigoTipo: 'ESPECIAL', NombreTipo: 'Especial' }],
       value: 'NUEVO',
       valueExpr: 'CodigoTipo',
-      displayExpr: 'NombreTipo',
-      // onValueChanged: (e) => this.generarSKU(e.value, 0)
+      displayExpr: 'NombreTipo'
     };
-    this.getColores = this.getColores.bind(this);
     this.loading = false;
   }
 
@@ -105,6 +112,10 @@ export class PedidoComponent implements OnInit {
 
   filterBySucursal(data, s) {
     return data.filter(e => e.codigoSucursal === s);
+  }
+
+  filterByDocumento(data, s) {
+    return data.filter(e => e.Documento === s);
   }
 
   setProductoValue(rowData: any, value: any) {
@@ -138,12 +149,4 @@ export class PedidoComponent implements OnInit {
   valorTotal_calculado(rowData) {
     return (rowData.cantidad * rowData.valorUnitario) - rowData.descuento;
   }
-
-  getColores(options) {
-    return {
-      store: this.colores,
-      filter: options.data ? ['CodigoProducto', '=', options.data.CodigoProducto] : null
-    };
-  }
-
 }
