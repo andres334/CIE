@@ -84,10 +84,10 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
 
     this.loading = true;
     this.storage.get('options').subscribe(
-      (data: [Opciones]) => {
+      (data) => {
         console.log(data);
-        if (data){
-            this._menu = data;
+        if (data['data']){
+            this._menu = data['data'];
             this.loading = false;
           }else{
             this.loading = false;

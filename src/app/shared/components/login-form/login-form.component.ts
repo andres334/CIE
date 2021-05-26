@@ -30,7 +30,7 @@ export class LoginFormComponent implements OnInit {
     });
   }
 
-  onSubmit(e) {
+  async onSubmit(e) {
     e.preventDefault();
     this.loading = true;
     const { email, password, rememberMe } = this.formData;
@@ -40,10 +40,10 @@ export class LoginFormComponent implements OnInit {
         if (data['data']) {
           this.user = data['data'];
           this.recuerdame(rememberMe, email);
+          this.storage.set('user', this.user).subscribe(() => {});
           notify('Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
         } else {
           this.loading = false;
-          console.log(data['message']);
           notify(data['message'], 'error', 2000);
         }
       },
@@ -51,6 +51,10 @@ export class LoginFormComponent implements OnInit {
         console.log(error);
       }
     );
+
+    this.authService.getOpciones().subscribe(options => {
+      this.storage.set('options', options).subscribe(() => {this.router.navigate([this.authService._lastAuthenticatedPath]);});
+    });
   }
 
   recuerdame(rememberMe: boolean, email: string) {

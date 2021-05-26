@@ -38,7 +38,7 @@ export class AuthService {
           this.setToken(resp['data'].token);
         } else if (resp['result'] === -1) {
           localStorage.removeItem('token');
-          this.storage.clear().subscribe(() => { });
+          // this.storage.clear().subscribe(() => {});
           this.router.navigate(['/login-form']);
         }
         return resp;
@@ -49,10 +49,10 @@ export class AuthService {
     return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        this.storage.clear().subscribe(() => { });
+        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
-      return resp['data'];
+      return resp;
     }));
   }
 
@@ -60,10 +60,10 @@ export class AuthService {
     return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        this.storage.clear().subscribe(() => { });
+        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
-      return resp['data'];
+      return resp;
     }));
   }
 
@@ -71,7 +71,7 @@ export class AuthService {
     return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        this.storage.clear().subscribe(() => { });
+        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -82,7 +82,7 @@ export class AuthService {
     return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        this.storage.clear().subscribe(() => { });
+        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -151,7 +151,7 @@ export class AuthService {
 
   async logOut() {
     localStorage.removeItem('token');
-    this.storage.clear().subscribe(() => { });
+    // this.storage.clear().subscribe(() => { });
     this.router.navigate(['/login-form']);
   }
 }
