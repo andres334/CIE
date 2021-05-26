@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 const defaultPath = '/';
 
@@ -18,7 +19,7 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router, private http: HttpClient) { }
+  constructor(private router: Router, private http: HttpClient, private storage: StorageMap) { }
 
   // http://localhost/WSCIE/Usuario/LogIn?Id=12412&Clave=1241
   getQuery(query: string){
@@ -37,7 +38,7 @@ export class AuthService {
       if (resp['result'] === 1){
         this.setToken(resp['data'].token);
       }else if (resp['result'] === -1) {
-        localStorage.removeItem('token');
+        this.storage.clear().subscribe(() => {});
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -47,7 +48,7 @@ export class AuthService {
   getUser() {
     return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
-        localStorage.removeItem('token');
+        this.storage.clear().subscribe(() => {});
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -57,7 +58,7 @@ export class AuthService {
   getOpciones() {
     return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
-        localStorage.removeItem('token');
+        this.storage.clear().subscribe(() => {});
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -67,7 +68,7 @@ export class AuthService {
   getCaja() {
     return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
-        localStorage.removeItem('token');
+        this.storage.clear().subscribe(() => {});
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -77,7 +78,7 @@ export class AuthService {
   getSucursal() {
     return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
-        localStorage.removeItem('token');
+        this.storage.clear().subscribe(() => {});
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -85,11 +86,14 @@ export class AuthService {
   }
 
   setToken( token: string){
-    localStorage.setItem('token', token);
+    this.storage.set('token', token).subscribe(() => {});
   }
-
+  
   getToken(){
-    return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
+    //return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
+    this.storage.get('token').subscribe((data) => {
+      return data ;
+    });
   }
 
   async createAccount(email, password) {
@@ -145,7 +149,7 @@ export class AuthService {
   }
 
   async logOut() {
-    localStorage.removeItem('token');
+    this.storage.clear().subscribe(() => {});
     this.router.navigate(['/login-form']);
   }
 }
