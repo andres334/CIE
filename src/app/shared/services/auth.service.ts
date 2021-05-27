@@ -7,26 +7,27 @@ const defaultPath = '/';
 
 @Injectable()
 export class AuthService {
+
+  get loggedIn(): boolean {
+    return (localStorage.getItem('token') ? true : false);
+  }
+
+  public _lastAuthenticatedPath: string = defaultPath;
   set lastAuthenticatedPath(value: string) {
     this._lastAuthenticatedPath = value;
   }
 
   constructor(private router: Router, private http: HttpClient) { }
 
-  public _lastAuthenticatedPath: string = defaultPath;
-
-  get loggedIn(): boolean {
-    return (localStorage.getItem('token') ? true : false);
-  }
-
-  getQuery(query: string) {
+  // http://localhost/WSCIE/Usuario/LogIn?Id=12412&Clave=1241
+  getQuery(query: string){
     return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
   }
 
-  postQuery(query: string, body: string[]) {
+  postQuery(query: string, body: string[]){
     return this.http.post(`https://cie.electroao.com/WSCIE/${query}`, body,
-      { headers: { 'Content-Type': 'application/json' } });
+    { headers: { 'Content-Type': 'application/json' }});
   }
 
   logIn(codigo: string, password: string) {
@@ -43,7 +44,7 @@ export class AuthService {
   }
 
   getUser() {
-    return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -53,7 +54,7 @@ export class AuthService {
   }
 
   getOpciones() {
-    return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -63,7 +64,7 @@ export class AuthService {
   }
 
   getCaja() {
-    return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -73,7 +74,7 @@ export class AuthService {
   }
 
   getSucursal() {
-    return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
         this.router.navigate(['/login-form']);
@@ -82,12 +83,12 @@ export class AuthService {
     }));
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  setToken( token: string){
+    localStorage.setItem('token', token);
   }
 
-  setToken(token: string) {
-    localStorage.setItem('token', token);
+  getToken(){
+    return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
   }
 
   async createAccount(email, password) {

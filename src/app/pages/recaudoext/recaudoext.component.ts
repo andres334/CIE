@@ -1,10 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { HttpEventType } from '@angular/common/http';
 import notify from 'devextreme/ui/notify';
 import { Usuario, RecaudoExt, ProgressStatus } from 'src/app/models';
 import { RecaudoextService, AuthService } from '../../shared/services';
 import { BarcodeFormat } from '@zxing/library';
-import { ProgressStatusEnum } from '../../models/progress.model';
 
 @Component({
   templateUrl: './recaudoext.component.html',

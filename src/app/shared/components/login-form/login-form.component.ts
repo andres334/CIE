@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, NgModule, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { StorageMap } from '@ngx-pwa/local-storage';
 import { DxFormModule } from 'devextreme-angular/ui/form';
 import { DxLoadIndicatorModule } from 'devextreme-angular/ui/load-indicator';
 import notify from 'devextreme/ui/notify';
 import { Usuario } from 'src/app/models';
 import { AuthService } from '../../services';
-import { StorageMap } from '@ngx-pwa/local-storage';
+
 
 @Component({
   selector: 'app-login-form',
@@ -17,7 +18,7 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   emailRem = '';
   formData: any = {};
-  user: Usuario;
+  user: Usuario ;
 
   constructor(
     private authService: AuthService,
@@ -25,17 +26,17 @@ export class LoginFormComponent implements OnInit {
     private storage: StorageMap
   ) {}
 
-  ngOnInit() {
-    this.storage.get('email').subscribe((data) => {
-      this.formData.email = data;
+  ngOnInit(){
+    if (localStorage.getItem('email')){
+      this.formData.email = localStorage.getItem('email');
       this.formData.rememberMe = true;
-    });
+    }
   }
 
-  async onSubmit(e) {
+  onSubmit(e) {
     e.preventDefault();
     this.loading = true;
-    const { email, password, rememberMe } = this.formData;
+    const { email, password , rememberMe } = this.formData;
     this.authService.logIn(email, password).subscribe(
       (data) => {
         console.log(data);
@@ -55,6 +56,7 @@ export class LoginFormComponent implements OnInit {
           this.storage.set('options', []).subscribe(() => {});
           this.storage.set('user', []).subscribe(() => {});
           this.loading = false;
+          console.log(data['message']);
           notify(data['message'], 'error', 2000);
         }
       },

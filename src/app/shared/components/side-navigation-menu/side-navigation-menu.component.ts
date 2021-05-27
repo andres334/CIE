@@ -5,7 +5,6 @@ import { AuthService } from '../../services';
 import * as events from 'devextreme/events';
 import { Opciones } from 'src/app/models';
 import notify from 'devextreme/ui/notify';
-import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-side-navigation-menu',
@@ -68,7 +67,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
     }
   }
 
-  constructor(private elementRef: ElementRef, private authService: AuthService, private storage: StorageMap) {  }
+  constructor(private elementRef: ElementRef, private authService: AuthService) {  }
 
   ngOnInit(){
   }
@@ -83,9 +82,8 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
     });
 
     this.loading = true;
-    this.storage.get('options').subscribe(
-      (data) => {
-        console.log(data);
+    this.authService.getOpciones().subscribe(
+      data => {
         if (data['data']){
             this._menu = data['data'];
             this.loading = false;

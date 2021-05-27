@@ -31,7 +31,7 @@ export class UserPanelComponent implements OnInit, AfterViewInit {
 
   constructor(private authService: AuthService, private storage: StorageMap) {}
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.storage.get('user').subscribe((data) => {
@@ -49,4 +49,4 @@ export class UserPanelComponent implements OnInit, AfterViewInit {
   declarations: [UserPanelComponent],
   exports: [UserPanelComponent],
 })
-export class UserPanelModule {}
+export class UserPanelModule { }
