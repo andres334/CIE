@@ -91,7 +91,7 @@ export class SideNavigationMenuComponent implements AfterViewInit, OnDestroy , O
             this.loading = false;
           }else{
             this.loading = false;
-            notify('Error al obtener opciones', 'error', 2000);
+            notify(data['message'], 'error', 2000);
           }
         },
        error => {

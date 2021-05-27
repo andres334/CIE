@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { StorageMap } from '@ngx-pwa/local-storage';
 
 const defaultPath = '/';
 
@@ -12,9 +11,8 @@ export class AuthService {
     this._lastAuthenticatedPath = value;
   }
 
-  constructor(private router: Router, private http: HttpClient, private storage: StorageMap) { }
+  constructor(private router: Router, private http: HttpClient) { }
 
-  // tslint:disable-next-line: variable-name
   public _lastAuthenticatedPath: string = defaultPath;
 
   get loggedIn(): boolean {
@@ -35,10 +33,9 @@ export class AuthService {
     return this.getQuery(`Usuario/LogIn?Id=${codigo}&Clave=${password}`)
       .pipe(map(resp => {
         if (resp['result'] === 1) {
-          this.setToken(resp['data'].token);
+          localStorage.setItem('token', resp['data'].token);
         } else if (resp['result'] === -1) {
           localStorage.removeItem('token');
-          // this.storage.clear().subscribe(() => {});
           this.router.navigate(['/login-form']);
         }
         return resp;
@@ -49,7 +46,6 @@ export class AuthService {
     return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -60,7 +56,6 @@ export class AuthService {
     return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -71,7 +66,6 @@ export class AuthService {
     return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -82,7 +76,6 @@ export class AuthService {
     return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe(map(resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -149,16 +142,15 @@ export class AuthService {
     }
   }
 
-  async logOut() {
+  logOut() {
     localStorage.removeItem('token');
-    // this.storage.clear().subscribe(() => { });
     this.router.navigate(['/login-form']);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService, private storage: StorageMap) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;

@@ -13,13 +13,14 @@ import { Usuario } from '../../../models';
 import { MainPipe } from '../../../main-pipe.module';
 import { AuthService } from '../../services';
 import notify from 'devextreme/ui/notify';
+import { StorageMap } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-user-panel',
   templateUrl: 'user-panel.component.html',
   styleUrls: ['./user-panel.component.scss'],
 })
-export class UserPanelComponent implements OnInit {
+export class UserPanelComponent implements OnInit, AfterViewInit {
   @Input()
   menuItems: any;
 
@@ -28,12 +29,12 @@ export class UserPanelComponent implements OnInit {
 
   user: Usuario;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private storage: StorageMap) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.authService.getUser().subscribe((data) => {
+    this.storage.get('user').subscribe((data) => {
       if (data['data']) {
         this.user = data['data'];
       } else {

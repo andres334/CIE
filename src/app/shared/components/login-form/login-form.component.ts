@@ -8,20 +8,22 @@ import { Usuario } from 'src/app/models';
 import { AuthService } from '../../services';
 import { StorageMap } from '@ngx-pwa/local-storage';
 
-
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
-  styleUrls: ['./login-form.component.scss']
+  styleUrls: ['./login-form.component.scss'],
 })
-
 export class LoginFormComponent implements OnInit {
   loading = false;
   emailRem = '';
   formData: any = {};
   user: Usuario;
 
-  constructor(private authService: AuthService, private router: Router, private storage: StorageMap) { }
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private storage: StorageMap
+  ) {}
 
   ngOnInit() {
     this.storage.get('email').subscribe((data) => {
@@ -35,33 +37,37 @@ export class LoginFormComponent implements OnInit {
     this.loading = true;
     const { email, password, rememberMe } = this.formData;
     this.authService.logIn(email, password).subscribe(
-      data => {
-        this.loading = false;
+      (data) => {
+        console.log(data);
         if (data['data']) {
           this.user = data['data'];
           this.recuerdame(rememberMe, email);
-          this.storage.set('user', this.user).subscribe(() => {});
-          notify('Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
+          this.storage.set('user', this.user).subscribe(() => {
+            this.authService.getOpciones().subscribe((options) => {
+              this.storage.set('options', options).subscribe(() => {
+                this.router.navigate([this.authService._lastAuthenticatedPath]);
+              });
+            });
+          });
+          notify( 'Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
+          this.loading = false;
         } else {
+          this.storage.set('options', []).subscribe(() => {});
+          this.storage.set('user', []).subscribe(() => {});
           this.loading = false;
           notify(data['message'], 'error', 2000);
         }
       },
-      error => {
+      (error) => {
         console.log(error);
       }
     );
-
-    this.authService.getOpciones().subscribe(options => {
-      this.storage.set('options', options).subscribe(() => {this.router.navigate([this.authService._lastAuthenticatedPath]);});
-    });
   }
 
   recuerdame(rememberMe: boolean, email: string) {
-    (rememberMe) ?
-      this.storage.set('email', email).subscribe(() => { })
-      :
-      this.storage.delete('email').subscribe(() => { });
+    rememberMe
+      ? this.storage.set('email', email).subscribe(() => {})
+      : this.storage.delete('email').subscribe(() => {});
   }
 
   onCreateAccountClick = () => {
@@ -69,13 +75,8 @@ export class LoginFormComponent implements OnInit {
   }
 }
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    DxFormModule,
-    DxLoadIndicatorModule
-  ],
+  imports: [CommonModule, RouterModule, DxFormModule, DxLoadIndicatorModule],
   declarations: [LoginFormComponent],
-  exports: [LoginFormComponent]
+  exports: [LoginFormComponent],
 })
-export class LoginFormModule { }
+export class LoginFormModule {}
