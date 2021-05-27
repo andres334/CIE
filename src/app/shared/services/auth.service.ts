@@ -2,54 +2,52 @@ import { Injectable } from '@angular/core';
 import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
-import { StorageMap } from '@ngx-pwa/local-storage';
 
 const defaultPath = '/';
 
 @Injectable()
 export class AuthService {
-  set lastAuthenticatedPath(value: string) {
-    this._lastAuthenticatedPath = value;
-  }
-
-  constructor(private router: Router, private http: HttpClient, private storage: StorageMap) { }
-
-  // tslint:disable-next-line: variable-name
-  public _lastAuthenticatedPath: string = defaultPath;
 
   get loggedIn(): boolean {
     return (localStorage.getItem('token') ? true : false);
   }
 
-  getQuery(query: string) {
-    return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+  // tslint:disable-next-line: variable-name
+  public _lastAuthenticatedPath: string = defaultPath;
+  set lastAuthenticatedPath(value: string) {
+    this._lastAuthenticatedPath = value;
   }
 
-  postQuery(query: string, body: string[]) {
+  constructor(private router: Router, private http: HttpClient) { }
+
+  // http://localhost/WSCIE/Usuario/LogIn?Id=12412&Clave=1241
+  getQuery(query: string){
+    return this.http.get(`https://cie.electroao.com/WSCIE/${query}`,
+    { headers: { 'Content-Type': 'application/x-www-form-urlencoded' }});
+  }
+
+  postQuery(query: string, body: string[]){
     return this.http.post(`https://cie.electroao.com/WSCIE/${query}`, body,
-      { headers: { 'Content-Type': 'application/json' } });
+    { headers: { 'Content-Type': 'application/json' }});
   }
 
   logIn(codigo: string, password: string) {
     return this.getQuery(`Usuario/LogIn?Id=${codigo}&Clave=${password}`)
-      .pipe(map(resp => {
-        if (resp['result'] === 1) {
-          this.setToken(resp['data'].token);
-        } else if (resp['result'] === -1) {
-          localStorage.removeItem('token');
-          // this.storage.clear().subscribe(() => {});
-          this.router.navigate(['/login-form']);
-        }
-        return resp;
-      }));
+    .pipe( map( resp => {
+      if (resp['result'] === 1){
+        this.setToken(resp['data'].token);
+      }else if (resp['result'] === -1) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login-form']);
+      }
+      return resp;
+    }));
   }
 
   getUser() {
-    return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/Datos?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -57,10 +55,9 @@ export class AuthService {
   }
 
   getOpciones() {
-    return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Opciones/Obtener?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -68,10 +65,9 @@ export class AuthService {
   }
 
   getCaja() {
-    return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/ObtenerCaja?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
@@ -79,22 +75,21 @@ export class AuthService {
   }
 
   getSucursal() {
-    return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe(map(resp => {
+    return this.getQuery(`Usuario/ObtenerSucursal?token=${this.getToken()}`).pipe( map( resp => {
       if (resp['result'] === -1) {
         localStorage.removeItem('token');
-        // this.storage.clear().subscribe(() => { });
         this.router.navigate(['/login-form']);
       }
       return resp;
     }));
   }
 
-  getToken() {
-    return localStorage.getItem('token');
+  setToken( token: string){
+    localStorage.setItem('token', token);
   }
 
-  setToken(token: string) {
-    localStorage.setItem('token', token);
+  getToken(){
+    return (localStorage.getItem('token') ? localStorage.getItem('token') : '');
   }
 
   async createAccount(email, password) {
@@ -151,14 +146,13 @@ export class AuthService {
 
   async logOut() {
     localStorage.removeItem('token');
-    // this.storage.clear().subscribe(() => { });
     this.router.navigate(['/login-form']);
   }
 }
 
 @Injectable()
 export class AuthGuardService implements CanActivate {
-  constructor(private router: Router, private authService: AuthService, private storage: StorageMap) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   canActivate(route: ActivatedRouteSnapshot): boolean {
     const isLoggedIn = this.authService.loggedIn;

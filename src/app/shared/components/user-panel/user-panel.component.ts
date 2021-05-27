@@ -19,7 +19,7 @@ import notify from 'devextreme/ui/notify';
   templateUrl: 'user-panel.component.html',
   styleUrls: ['./user-panel.component.scss'],
 })
-export class UserPanelComponent implements OnInit {
+export class UserPanelComponent implements OnInit, AfterViewInit {
   @Input()
   menuItems: any;
 
@@ -28,9 +28,9 @@ export class UserPanelComponent implements OnInit {
 
   user: Usuario;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ngAfterViewInit() {
     this.authService.getUser().subscribe((data) => {
@@ -48,4 +48,4 @@ export class UserPanelComponent implements OnInit {
   declarations: [UserPanelComponent],
   exports: [UserPanelComponent],
 })
-export class UserPanelModule {}
+export class UserPanelModule { }
