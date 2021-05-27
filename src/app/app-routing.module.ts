@@ -9,7 +9,6 @@ import {
   DxDataGridModule, DxFormModule, DxCheckBoxModule, DxPopupModule, DxButtonModule, DxLoadIndicatorModule,
   DxBoxModule
 } from 'devextreme-angular';
-import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { DocumentViewerModule } from './shared/components/document-viewer/document-viewer.component';
 
 const routes: Routes = [
@@ -76,7 +75,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), BrowserModule, MainPipe, DxDataGridModule, DxFormModule, DxCheckBoxModule,
-    DxPopupModule, DxButtonModule, DxLoadIndicatorModule, DxBoxModule, ZXingScannerModule, DocumentViewerModule],
+    DxPopupModule, DxButtonModule, DxLoadIndicatorModule, DxBoxModule, DocumentViewerModule],
   providers: [AuthGuardService],
   exports: [RouterModule],
   declarations: [HomeComponent, ProfileComponent, TasksComponent, ProductosComponent, RecaudoextComponent, PedidoComponent]
