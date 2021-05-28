@@ -1,11 +1,14 @@
 <div class="content-block dx-card responsive-paddings">
     <dx-form id="form" [formData]="recaudoext" [disabled]="loading" [showValidationSummary]="true" validationGroup="recaudoData">
-        <dxi-item itemType="group" [colCount]="2">
+        <dxi-item itemType="group" [colCount]="3">
             <dxi-item dataField="CodigoEntidad" editorType="dxSelectBox" [editorOptions]="entidadOptions">
                 <dxi-validation-rule type="required" message="La Entidad Recaudadora es requerida"></dxi-validation-rule>
             </dxi-item>
             <dxi-item dataField="CodigoCaja" editorType="dxSelectBox" [editorOptions]="cajaOptions">
                 <dxi-validation-rule type="required" message="La Caja es requerida"></dxi-validation-rule>
+            </dxi-item>
+            <dxi-item dataField="CodigoFormaPago" editorType="dxSelectBox" [editorOptions]="pagoOptions">
+                <dxi-validation-rule type="required" message="La Forma de Pago es requerida"></dxi-validation-rule>
             </dxi-item>
         </dxi-item>
         <dxi-item itemType="group" [colCount]="3" [visible]="!popupVisible">

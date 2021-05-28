@@ -34,11 +34,11 @@ export class UserPanelComponent implements OnInit, AfterViewInit {
   ngOnInit() { }
 
   ngAfterViewInit() {
-    this.storage.get('user').subscribe((data) => {
-      if (data['data']) {
-        this.user = data['data'];
+    this.storage.get('user').subscribe((data: Usuario) => {
+      if (data) {
+        this.user = data;
       } else {
-        notify(data['message'], 'error', 2000);
+        notify('error al obtener usuario', 'error', 2000);
       }
     });
   }

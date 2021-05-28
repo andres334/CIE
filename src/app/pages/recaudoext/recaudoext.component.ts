@@ -11,9 +11,9 @@ import { BarcodeFormat } from '@zxing/library';
 export class RecaudoextComponent implements OnInit {
   user: Usuario;
   loading: boolean;
-  // recaudoext: RecaudoExt = new RecaudoExt('AO', 890101691, 48255337, 186993473, 'KR44 CL27 C-35', 'C004-00', new Date(), 5593);
   recaudoext: RecaudoExt = new RecaudoExt('', 0, 0, 0, '', '', new Date(), 0);
   entidadOptions: any;
+  pagoOptions: any;
   cajaOptions: any;
   popupVisible: boolean;
   popupPagoVisible: boolean;
@@ -25,7 +25,6 @@ export class RecaudoextComponent implements OnInit {
   codigoBarras = '';
 
   @Output() idRecaudo = '';
-  // '318818'
 
   @Output() public downloadStatus: EventEmitter<ProgressStatus>;
 
@@ -72,6 +71,16 @@ export class RecaudoextComponent implements OnInit {
           items: data['data'],
           valueExpr: 'codigoEntidad',
           displayExpr: 'nombreEntidad'
+        };
+      }
+    });
+    this.recaudoextService.getDatosFPago().subscribe((data) => {
+      if (data['data']) {
+        this.pagoOptions = {
+          value: data['data'][0].codigoFormaPago,
+          items: data['data'],
+          valueExpr: 'codigoFormaPago',
+          displayExpr: 'nombreFormaPago'
         };
       }
     });

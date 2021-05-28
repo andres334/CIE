@@ -46,6 +46,16 @@ export class RecaudoextService {
     }));
   }
 
+  getDatosFPago(){
+    return this.getQuery(`RecaudoExt/ObtenerFPagos?token=${this.authService.getToken()}`).pipe( map( resp => {
+      if (resp['result'] === -1) {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login-form']);
+      }
+      return resp;
+    }));
+  }
+
   postRecaudo(recaudoExt: RecaudoExt){
     return this.postQuery(`RecaudoExt/Guardar?token=${this.authService.getToken()}`, recaudoExt).pipe(map( resp => {
       if (resp['result'] === -1) {

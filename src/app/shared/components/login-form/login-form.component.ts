@@ -8,7 +8,6 @@ import notify from 'devextreme/ui/notify';
 import { Usuario } from 'src/app/models';
 import { AuthService } from '../../services';
 
-
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
@@ -18,7 +17,7 @@ export class LoginFormComponent implements OnInit {
   loading = false;
   emailRem = '';
   formData: any = {};
-  user: Usuario ;
+  user: Usuario;
 
   constructor(
     private authService: AuthService,
@@ -26,31 +25,34 @@ export class LoginFormComponent implements OnInit {
     private storage: StorageMap
   ) {}
 
-  ngOnInit(){
-    if (localStorage.getItem('email')){
-      this.formData.email = localStorage.getItem('email');
-      this.formData.rememberMe = true;
-    }
+  ngOnInit() {
+    this.storage.get('email').subscribe((data) => {
+      if (data) {
+        this.formData.email = data;
+        this.formData.rememberMe = true;
+      }
+    });
   }
 
   onSubmit(e) {
     e.preventDefault();
     this.loading = true;
-    const { email, password , rememberMe } = this.formData;
+    const { email, password, rememberMe } = this.formData;
     this.authService.logIn(email, password).subscribe(
       (data) => {
-        console.log(data);
         if (data['data']) {
           this.user = data['data'];
           this.recuerdame(rememberMe, email);
-          this.storage.set('user', this.user).subscribe(() => {
-            this.authService.getOpciones().subscribe((options) => {
-              this.storage.set('options', options).subscribe(() => {
-                this.router.navigate([this.authService._lastAuthenticatedPath]);
-              });
-            });
+          this.storage.set('user', this.user).subscribe(() => {});
+          this.authService.getOpciones().subscribe((options) => {
+            this.storage.set('options', options).subscribe(() => {});
           });
-          notify( 'Bienvenido ' + this.user.nombreUsuario + '...!', 'success', 2000);
+          this.router.navigate([this.authService._lastAuthenticatedPath]);
+          notify(
+            'Bienvenido ' + this.user.nombreUsuario + '...!',
+            'success',
+            2000
+          );
           this.loading = false;
         } else {
           this.storage.set('options', []).subscribe(() => {});
@@ -72,7 +74,7 @@ export class LoginFormComponent implements OnInit {
       : this.storage.delete('email').subscribe(() => {});
   }
 
-  onCreateAccountClick = () => {
+  onCreateAccountClick(){
     this.router.navigate(['/create-account']);
   }
 }

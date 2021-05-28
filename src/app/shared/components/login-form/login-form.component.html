@@ -1,47 +1,44 @@
 <form class="login-form" (submit)="onSubmit($event)">
-  <dx-form [formData]="formData" [disabled]="loading">
+    <dx-form [formData]="formData" [disabled]="loading">
 
-    <dxi-item dataField="email" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Usuario', mode: 'text' }">
-      <dxi-validation-rule type="required" message="El Usuario es Requerido"></dxi-validation-rule>
-      <dxi-validation-rule type="pattern" pattern="^[0-9]+$" message="El Usuario no deberia contener Letras"></dxi-validation-rule>
-      <dxo-label [visible]="false"></dxo-label>
-    </dxi-item>
+        <dxi-item dataField="email" editorType="dxTextBox" [editorOptions]="{ stylingMode: 'filled', placeholder: 'Usuario', mode: 'text' }">
+            <dxi-validation-rule type="required" message="El Usuario es Requerido"></dxi-validation-rule>
+            <dxi-validation-rule type="pattern" pattern="^[0-9]+$" message="El Usuario no deberia contener Letras"></dxi-validation-rule>
+            <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
 
-    <dxi-item dataField="password" editorType="dxTextBox"
-      [editorOptions]="{ stylingMode: 'filled', placeholder: 'Contraseña', mode: 'password' }">
-      <dxi-validation-rule type="required" message="la Contraseña es Requerida"></dxi-validation-rule>
-      <dxo-label [visible]="false"></dxo-label>
-    </dxi-item>
+        <dxi-item dataField="password" editorType="dxTextBox" [editorOptions]="{ stylingMode: 'filled', placeholder: 'Contraseña', mode: 'password' }">
+            <dxi-validation-rule type="required" message="la Contraseña es Requerida"></dxi-validation-rule>
+            <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
 
-    <dxi-item dataField="rememberMe" editorType="dxCheckBox"
-      [editorOptions]="{ text: 'Recuerdame', elementAttr: { class: 'form-text' } }">
-      <dxo-label [visible]="false"></dxo-label>
-    </dxi-item>
+        <dxi-item dataField="rememberMe" editorType="dxCheckBox" [editorOptions]="{ text: 'Recuerdame', elementAttr: { class: 'form-text' } }">
+            <dxo-label [visible]="false"></dxo-label>
+        </dxi-item>
 
-    <dxi-item itemType="button">
-      <dxo-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'signInTemplate'">
-      </dxo-button-options>
-    </dxi-item>
+        <dxi-item itemType="button">
+            <dxo-button-options width="100%" type="default" [useSubmitBehavior]="true" [template]="'signInTemplate'">
+            </dxo-button-options>
+        </dxi-item>
 
-    <dxi-item>
-      <div class="link">
-        <a routerLink="/reset-password">Olvidaste tu Contraseña?</a>
-      </div>
-    </dxi-item>
+        <dxi-item>
+            <div class="link">
+                <a routerLink="/reset-password">Olvidaste tu Contraseña?</a>
+            </div>
+        </dxi-item>
 
-    <dxi-item *ngIf="false" itemType="button">
-      <dxo-button-options text="Crear una Cuenta" width="100%" [onClick]="onCreateAccountClick"></dxo-button-options>
-    </dxi-item>
+        <dxi-item *ngIf="false" itemType="button">
+            <dxo-button-options text="Crear una Cuenta" width="100%" [onClick]="onCreateAccountClick"></dxo-button-options>
+        </dxi-item>
 
-    <ng-container *dxTemplate="let item of 'signInTemplate'">
-      <span class="dx-button-text">
+        <ng-container *dxTemplate="let item of 'signInTemplate'">
+            <span class="dx-button-text">
         <ng-container *ngIf="loading; else notLoading">
           <dx-load-indicator width="24px" height="24px" [visible]="true"></dx-load-indicator>
         </ng-container>
         <ng-template #notLoading>Entrar</ng-template>
       </span>
-    </ng-container>
+        </ng-container>
 
-  </dx-form>
+    </dx-form>
 </form>
